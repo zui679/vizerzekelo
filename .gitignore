@@ -1,0 +1,24 @@
+# Titkos adatok (WiFi jelszó, API kulcs, SIM PIN) – SOHA ne kerüljön fel!
+firmware/vizerzekelo/secrets.h
+
+# Arduino / fordítási mellékterméke
+build/
+*.bin
+*.hex
+*.elf
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Letöltött mérési adatok (nagyok lehetnek; ha mégis kell, vedd ki ezt a sort)
+adatok/*.csv
+adatok/*.png
+
+# Szerkesztők, OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
