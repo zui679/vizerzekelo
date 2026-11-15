@@ -13,5 +13,6 @@ int  modemHttpGet(const String& url); // HTTP státuszkód (pl. 200), negatív =
 void modemPowerOff();                 // szabályos leállítás + táp KI
 bool modemIsOn();
 
-// Szerviz módhoz: a soros monitor és a modem "összekötése"
-void modemPassthrough();
+// Szerviz módhoz: a soros monitor és a modem "összekötése".
+// Kilépés a KILEP szóval (true), vagy ha idleTimeoutMs ideig nem írunk be semmit (false).
+bool modemPassthrough(uint32_t idleTimeoutMs);

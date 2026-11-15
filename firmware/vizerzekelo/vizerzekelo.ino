@@ -38,6 +38,7 @@ static void printBanner() {
 // Egy teljes mérési ciklus: mér → küld → kikapcsol
 static void runCycle() {
   Measurement m;
+  if (serviceJumperStuck()) m.flags |= FLAG_SERVICE_JUMPER;
 
   // 1. Akku ellenőrzés: ha nagyon lemerült, nem terheljük tovább
   m.batteryV = readBatteryVoltage();
@@ -74,9 +75,9 @@ static void runCycle() {
 
 void setup() {
   powerBegin();                 // minden kapcsoló KI – ez legyen az első!
+  // Megjegyzés: az UNO R4 WiFi-n a "while (!Serial)" nem vár semmire (az USB egy
+  // külön chipen megy át, a Serial mindig "igaz"), ezért itt nincs várakozás.
   Serial.begin(115200);
-  uint32_t t0 = millis();
-  while (!Serial && millis() - t0 < 1500) {}   // vár a soros monitorra, de nem örökké
 
   statusBegin();
   printBanner();

@@ -213,20 +213,23 @@ int modemHttpGet(const String& url) {
 // ---------------------------------------------------------------------
 // Szerviz: kézi AT parancsok a soros monitorból
 // ---------------------------------------------------------------------
-void modemPassthrough() {
-  if (!modemOn && !modemPowerOn()) return;
+bool modemPassthrough(uint32_t idleTimeoutMs) {
+  if (!modemOn && !modemPowerOn()) return true;
   Serial.println(F("=== Modem konzol ==="));
   Serial.println(F("Írj AT parancsokat (pl. AT+CSQ, AT+COPS?, AT+CPIN?)."));
   Serial.println(F("Kilépés: KILEP"));
   String line;
+  uint32_t lastInput = millis();
   while (true) {
+    if (millis() - lastInput > idleTimeoutMs) return false;   // tétlenség
     while (MODEM_SERIAL.available()) Serial.write(MODEM_SERIAL.read());
     while (Serial.available()) {
       char c = (char)Serial.read();
+      lastInput = millis();
       if (c == '\r') continue;
       if (c == '\n') {
         line.trim();
-        if (line.equalsIgnoreCase("KILEP")) return;
+        if (line.equalsIgnoreCase("KILEP")) return true;
         MODEM_SERIAL.print(line);
         MODEM_SERIAL.print("\r\n");
         line = "";

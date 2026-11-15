@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
-    PV[Napelem<br/>6 V, 6 W] --> CHG[Napelemes töltésvezérlő<br/>MPPT, 1S Li-ion<br/>5 V kimenet]
+    PV[Napelem ~6 W<br/>feszültsége a töltőhöz illesztve] --> CHG[Napelemes töltésvezérlő<br/>MPPT, 1S Li-ion<br/>5 V kimenet]
     CHG <--> BAT[Li-ion akku<br/>2× 18650 párhuzamosan<br/>3,7 V, 6800 mAh]
     CHG -- 5 V --> TPL[TPL5110<br/>időzítő]
     TPL -- 5 V USB --> ARD[Arduino UNO R4 WiFi]
@@ -16,11 +16,34 @@ flowchart LR
 
 | Rész | Feladat | Javasolt típus |
 |---|---|---|
-| Napelem | napfényből áram | 6 V, 6 W (vagy 10 W) monokristályos, kültéri, UV-álló |
-| Töltésvezérlő | akku töltése, védelme, 5 V előállítása | 1S Li-ion napelemes töltő MPPT-vel, 5 V ≥ 1 A kimenettel (pl. DFRobot Solar Power Manager 5V, Waveshare Solar Power Manager) |
+| Napelem | napfényből áram | kb. 6 W (vagy 10 W) monokristályos, kültéri, UV-álló. **A feszültségét a töltőhöz kell választani – lásd 4.1.1!** |
+| Töltésvezérlő | akku töltése, védelme, 5 V előállítása | 1S Li-ion napelemes töltő MPPT-vel, 5 V ≥ 1 A kimenettel (példák a 4.1.1 pontban) |
 | Akku | energiatárolás éjszakára, borús napokra | 2 db védett (PCB-s) 18650 Li-ion cella párhuzamosan, márkás (pl. 3400 mAh) |
 | TPL5110 | a mérések közti teljes lekapcsolás | Adafruit TPL5110 Low Power Timer Breakout |
 | Modem kapcsoló | a modem tápjának ki-bekapcsolása | P-csatornás logikai MOSFET + NPN tranzisztor (lásd [bekotes.md](../hardware/bekotes.md)) |
+
+### 4.1.1 A napelem és a töltésvezérlő párosítása – ezt nem szabad elrontani!
+
+A napelemet és a töltésvezérlőt **együtt, párban** kell kiválasztani. Ha a napelem
+feszültsége nagyobb, mint amit a töltő elvisel, a töltő **tönkremegy**.
+
+**A szabály:** a napelem **üresjárási feszültsége** (az adatlapon *Voc* – ez a legnagyobb
+feszültség, amit a panel terhelés nélkül, tűző napon lead) legyen **kisebb**, mint a töltő
+megengedett legnagyobb bemeneti feszültsége. Az üresjárási feszültség jellemzően kb. 20%-kal
+nagyobb a panel névleges (munkaponti, *Vmp*) feszültségénél – egy „6 V-os” panel tehát
+napon 7 V fölé is mehet!
+
+| Töltésvezérlő (példa) | Napelem bemenet | Hozzá illő panel | Akku | 5 V kimenet |
+|---|---|---|---|---|
+| **DFRobot Solar Power Manager 5V** (DFR0559) | 4,5–6 V; **6,5 V fölött károsodhat** | **5 V-os** névleges feszültségű panel, legfeljebb 10 W. **6 V-os panel NEM jó hozzá!** | 1 cellás Li-ion (csatlakozón) | 5 V / 1 A |
+| **Waveshare Solar Power Manager (C)** | 6–24 V | 6 V, 9 V vagy 12 V névleges feszültségű panel | 3 db 18650 (a panelen lévő foglalatban) | 5 V / 3 A |
+
+- A Waveshare típuson egy kapcsolóval a panel feszültségéhez kell állítani az MPPT-t (lásd a gyártó leírását).
+- A Waveshare-nek több változata van (alapváltozat, B, C, D), eltérő akkuval és kimenettel –
+  rendeléskor figyelj a betűjelre. A DFR0559-et egyes forgalmazók kifutó termékként jelölik,
+  a beszerezhetőségét ellenőrizd.
+- Bármelyik töltőt választod: a **modem tápját az akku kapcsairól** kell leágaztatni
+  (biztosítékon át). Vásárlás előtt nézd meg, hogy a választott panelen ez megoldható-e.
 
 > A konkrét modul vásárlása előtt **mindig ellenőrizd az adatlapot:** bemeneti feszültség
 > (illeszkedik-e a napelemhez), kimeneti áram, mélykisütés-védelem, és van-e hőmérséklet-figyelés.
@@ -52,7 +75,10 @@ python3 tools/energia_kalkulator.py --intervallum 15 --akku 6800 --napelem 6
 | 30 perc (GSM) | 1,05 Wh | ≈ 19 nap |
 | 15 perc (WiFi) | 1,0 Wh | ≈ 20 nap |
 
-### Napelem termelés (6 W panel, 35° dőlés, déli tájolás, 60% rendszerhatásfok)
+### Napelem termelés (6 W-os panel, 35° dőlés, déli tájolás, 60% rendszerhatásfok)
+
+*(A termelés a panel teljesítményétől (W) függ, nem a feszültségétől – egy 5 V-os és egy
+12 V-os 6 W-os panel ugyanannyi energiát ad.)*
 
 | Hónap | Termelés Wh/nap | Mérleg (15 perces mérés) |
 |---|---|---|

@@ -81,8 +81,16 @@ arduino-cli upload -b arduino:renesas_uno:unor4wifi -p /dev/ttyACM0 firmware/viz
 
 Két módon lehet belépni:
 
-- Bekapcsolás után **3 másodpercen belül Enter** a soros monitorban (ha USB-n csatlakozik a gép), vagy
-- a **D2 láb GND-re kötve** (szerviz jumper) bekapcsoláskor.
+- a **D2 láb GND-re kötve** (szerviz jumper) bekapcsoláskor – terepen ez az egyetlen mód; vagy
+- tesztpadon: bekapcsolás után **3 másodpercen belül Enter** a soros monitorban.
+
+> **Terepi telepítés előtt állítsd `SERVICE_PROMPT_MS`-t 0-ra** a `config.h`-ban! Az UNO R4 WiFi
+> nem tudja megállapítani, hogy van-e számítógép az USB-n (a `Serial` mindig „igaz”), ezért a
+> 3 másodperces várakozás minden ébredéskor lefutna, és feleslegesen fogyasztana.
+
+**Védelem a bent felejtett jumper ellen:** `SERVICE_TIMEOUT_S` (10 perc) tétlenség után a menü
+kilép. Ha a jumper ekkor is bent van, a doboz a kivételéig nem lép újra szerviz módba, normálisan
+mér, és `SZERVIZ_JUMPER` állapotot küld.
 
 A menüből lehet kalibrálni, élőben nézni a mért értékeket, kézzel AT parancsokat küldeni a modemnek,
 és kipróbálni egy teljes mérés + küldés ciklust. Részletek: [docs/08_kalibracio_es_karbantartas.md](../docs/08_kalibracio_es_karbantartas.md).

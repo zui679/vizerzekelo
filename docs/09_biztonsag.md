@@ -17,7 +17,7 @@
 
 ## 9.2 Elektromos biztonság
 
-A teljes rendszer **törpefeszültségű** (max. ~6–7 V a napelemről, 4,2 V az akkuról, 5 V az
+A teljes rendszer **törpefeszültségű** (a napelemről a választott típustól függően kb. 6–22 V, 4,2 V az akkuról, 5 V az
 Arduinón) – áramütés veszélye nincs. A veszélyt az **akku** jelenti:
 
 ### Li-ion akku – csak felnőtt kezeli

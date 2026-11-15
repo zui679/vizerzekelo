@@ -29,7 +29,7 @@ const long MODEM_BAUD = 115200;
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial) {}
+  delay(2000);   // az R4 WiFi-n a "while (!Serial)" nem vár, ezért fix 2 mp a monitor megnyitására
   pinMode(PIN_MODEM_PWRKEY, OUTPUT);
   digitalWrite(PIN_MODEM_PWRKEY, PWRKEY_ACTIVE_HIGH ? LOW : HIGH);
   pinMode(PIN_MODEM_POWER, OUTPUT);
