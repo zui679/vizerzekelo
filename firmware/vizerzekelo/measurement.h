@@ -17,6 +17,7 @@ enum StatusFlag : uint16_t {
   FLAG_TURBIDITY_ERR   = 1 << 7,
   FLAG_DO_ERR          = 1 << 8,
   FLAG_NOT_CALIBRATED  = 1 << 9,
+  FLAG_SERVICE_JUMPER  = 1 << 10, // a szerviz jumper bent maradt
 };
 
 struct Measurement {

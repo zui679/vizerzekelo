@@ -5,7 +5,7 @@
 ```mermaid
 flowchart TB
     subgraph TAP[Energiaellátás]
-        PV[Napelem 6 V / 6 W] --> CHG[Napelemes töltésvezérlő<br/>MPPT, 1S Li-ion]
+        PV[Napelem ~6 W<br/>feszültség a töltőhöz illesztve] --> CHG[Napelemes töltésvezérlő<br/>MPPT, 1S Li-ion]
         CHG <--> BAT[Li-ion akku<br/>2× 18650, 3,7 V]
         CHG -->|5 V| TPL[TPL5110<br/>időzítő kapcsoló]
     end
@@ -144,6 +144,7 @@ flowchart LR
 | `DOBOZSZENZOR_HIBA` | nincs BME280 | Qwiic kábel |
 | `PH_HIBA`, `EC_HIBA`, `ZAVAROSSAG_HIBA`, `DO_HIBA` | a szenzor jele értelmetlen | kábel, szonda, kalibráció |
 | `NINCS_KALIBRALVA` | még gyári kalibrációs értékek | kalibrálás a szerviz menüben |
+| `SZERVIZ_JUMPER` | a szerviz jumper bent maradt; a doboz mér, de szerviz módba nem lép | a jumpert ki kell venni |
 
 ## 2.5 Lábkiosztás röviden
 

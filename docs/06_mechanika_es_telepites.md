@@ -69,6 +69,18 @@ biztonságosan részt vehetnek a karbantartásban.
 - A csövet úgy tervezzük, hogy **felhúzható** legyen (pl. kötél / sín mentén) – így a szondák
   tisztításához nem kell a vízbe menni.
 
+### Kábelhosszak – tervezés előtt ellenőrizni!
+A doboz és a szondák távolsága a fenti elrendezésben kb. **2 m kábelt** igényel (doboz
+magassága + merülés + vezetés a dobozban). A gyári kábelek nem mind ilyen hosszúak:
+
+- az ipari **pH szonda** kábele 5 m – elég, és **nem toldható**;
+- a **TDS szonda** teljes hossza csak **83 cm**, és a **zavarosság szenzor** kábele is rövid –
+  ezeket **hosszabbítani kell** (a toldás a víz felett legyen, vízzáróan), utána újrakalibrálni;
+- a **DS18B20**-ból eleve hosszú (≥ 3 m) kábelűt kell venni.
+
+A hosszabbítás módja és a kábelterv: [../hardware/bekotes.md](../hardware/bekotes.md) 6. pont.
+A dobozt **ne** tegyük lejjebb a rövid kábel miatt – az árvízbiztonság fontosabb.
+
 ## 6.3 Helyszín kiválasztása
 
 | Szempont | Mire figyeljünk? |
@@ -105,7 +117,8 @@ oktatási célú projekteket gyakran szívesen támogatnak, adhatnak tanácsot a
 - [ ] Szenzorok frissen kalibrálva (dátum feljegyezve)
 - [ ] Akku feltöltve, feszültség feljegyezve
 - [ ] Tömszelencék meghúzva, tömítés ellenőrizve, friss szilikagél
-- [ ] `config.h`: `TRANSPORT_MODE TRANSPORT_GSM`, SIM egyenleg rendben
+- [ ] `config.h`: `TRANSPORT_MODE TRANSPORT_GSM`, **`SERVICE_PROMPT_MS 0`** (terepen ne várjon
+      Enterre minden ébredéskor), SIM egyenleg rendben
 - [ ] TPL5110 időköz beállítva és ellenőrizve
 - [ ] Szerszámok: csavarhúzók, kulcsok, bilincsek, kábelkötegelők, multiméter, laptop + USB kábel
 - [ ] Biztonsági felszerelés: mentőmellény (vízhez közel dolgozóknak), elsősegélycsomag, telefon
@@ -115,7 +128,8 @@ oktatási célú projekteket gyakran szívesen támogatnak, adhatnak tanácsot a
 - [ ] Cölöp / tartó rögzítése, a doboz felszerelése a víz fölé
 - [ ] Szenzortartó cső rögzítése, szondák a vízben, megfelelő mélységben
 - [ ] Napelem tájolása (dél), dőlésszög
-- [ ] Szerviz mód → **10-es menüpont** (mérés + küldés teszt) → megjelent az adat a ThingSpeakben?
+- [ ] Szerviz mód (jumperrel) → **10-es menüpont** (mérés + küldés teszt) → megjelent az adat a ThingSpeakben?
+- [ ] **Szerviz jumper kivéve!** (Ha bent marad, a doboz `SZERVIZ_JUMPER` állapotot küld.)
 - [ ] Doboz lezárása, tájékoztató tábla kihelyezése
 - [ ] Fotók a telepítésről (dokumentáció!), GPS koordináták feljegyzése
 

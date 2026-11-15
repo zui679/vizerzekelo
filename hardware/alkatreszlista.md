@@ -19,7 +19,7 @@
 
 | # | Alkatrész | Példa típus | Db | Kb. ár | | Megjegyzés |
 |---|---|---|---|---|---|---|
-| 2.1 | Vízhőmérő | DS18B20, vízálló, 2–3 m kábel | 1 (+1 T) | 1 500 | K | |
+| 2.1 | Vízhőmérő | DS18B20, vízálló, **legalább 3 m** kábellel | 1 (+1 T) | 1 500 | K | |
 | 2.2 | 4,7 kΩ ellenállás | | 1 | – | K | DS18B20 felhúzó |
 | 2.3 | pH készlet **terepre** | DFRobot Gravity Analog pH Sensor/Meter **Pro Kit V2** (SEN0169-V2): erősítő panel + **ipari** szonda | 1 | 25 000–35 000 | K | tartós merítéshez. Vásárláskor ellenőrizd, hogy az erősítő panel is benne van-e a csomagban! |
 | 2.4 | pH készlet **tanuláshoz** | DFRobot SEN0161-V2 (panel + labor szonda) **vagy** PH-4502C + E-201-C | 1 | 6 000–15 000 | O | kísérletekhez, hogy a drága ipari szonda megmaradjon a terepre. Lásd [12. fejezet](../docs/12_oktatasi_szenzorok.md) |
@@ -41,10 +41,10 @@
 
 | # | Alkatrész | Példa típus | Db | Kb. ár | | Megjegyzés |
 |---|---|---|---|---|---|---|
-| 4.1 | Napelem | 6 V, 6 W (vagy 10 W) monokristályos, kültéri | 1 | 5 000–9 000 | K | a töltésvezérlő bemenetéhez illő feszültségű! |
-| 4.2 | Napelemes töltésvezérlő | 1S Li-ion, MPPT, 5 V ≥1 A kimenet (pl. DFRobot Solar Power Manager 5V, Waveshare Solar Power Manager) | 1 | 6 000–10 000 | K | előny: NTC (hőmérséklet) bemenet |
+| 4.1 | Napelem | kb. 6 W (vagy 10 W) monokristályos, kültéri. **Feszültség a 4.2 töltőhöz:** DFR0559-hez **5 V-os**, Waveshare (C)-hez 6 / 9 / 12 V-os | 1 | 5 000–9 000 | K | **a panel üresjárási feszültsége (Voc) legyen a töltő max. bemenete alatt**, különben a töltő tönkremegy – lásd [04_energiaellatas.md](../docs/04_energiaellatas.md) 4.1.1 |
+| 4.2 | Napelemes töltésvezérlő | 1S Li-ion, MPPT, 5 V ≥1 A kimenet. Példák: DFRobot Solar Power Manager 5V (DFR0559; bemenet 4,5–6 V) **vagy** Waveshare Solar Power Manager (C) (bemenet 6–24 V, 3×18650 foglalat) | 1 | 6 000–12 000 | K | a napelemmel **párban** kell választani; előny: NTC (hőmérséklet) bemenet |
 | 4.3 | Li-ion cella | 18650, **védett (PCB)**, márkás, 3000–3500 mAh | 2 | 2 × 3 000 | K | |
-| 4.4 | Akkutartó | 2 × 18650, **párhuzamos** bekötésű | 1 | 800 | K | vagy forrfüles cellák, felnőtt szerelje |
+| 4.4 | Akkutartó | 2 × 18650, **párhuzamos** bekötésű | 1 | 800 | K | vagy forrfüles cellák, felnőtt szerelje. Nem kell, ha a töltő panelen van akkufoglalat (pl. Waveshare (C)) |
 | 4.5 | Biztosíték + tartó | 3 A, autós mini lapos vagy üvegcsöves, vezetékbe köthető | 1 | 800 | K | az akku + pólusánál! |
 | 4.6 | Időzítő | **Adafruit TPL5110** Low Power Timer Breakout | 1 | 2 500 | K | |
 | 4.7 | USB-A aljzat panel | „USB-A female breakout” | 1 | 300 | K | TPL5110 → Arduino |
@@ -80,6 +80,7 @@ Lásd [bekotes.md](bekotes.md) 3. pont. 4 db (pH, EC, zavarosság, modem) + 1 op
 | 6.8 | Rögzítés | rozsdamentes csőbilincsek, csavarok, U-csavar | készlet | 4 000 | K | csak rozsdamentes! |
 | 6.9 | Napelem tartó | szögvas / alu L-profil | 1 | 2 000 | K | |
 | 6.10 | Kábelvédő gégecső | Ø 16–20 mm, UV-álló | 2–3 m | 1 500 | K | |
+| 6.10b | Hosszabbító kábel + ragasztós zsugorcső | 2 és 3 eres, kültéri, lehetőleg árnyékolt kábel (2–3 m); belül olvadó (ragasztós) zsugorcső | 1–1 | 2 000 | K | a TDS szonda (83 cm) és a zavarosság szenzor rövid gyári kábeléhez – lásd [bekotes.md](bekotes.md) 6. pont |
 | 6.11 | Vízálló csatlakozók | GX12 / M12, 3–4 pólusú | 4 | 4 000 | O | szondák cserélhetősége |
 | 6.12 | Lakat / biztonsági csavarok | | 1 | 2 000 | O | vandalizmus ellen |
 | 6.13 | Tájékoztató tábla | laminált, „Iskolai vízminőség-mérő…” | 1 | 1 000 | K | |

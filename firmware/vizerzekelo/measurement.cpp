@@ -14,6 +14,7 @@ static const FlagName FLAG_NAMES[] = {
   {FLAG_TURBIDITY_ERR,  "ZAVAROSSAG_HIBA"},
   {FLAG_DO_ERR,         "DO_HIBA"},
   {FLAG_NOT_CALIBRATED, "NINCS_KALIBRALVA"},
+  {FLAG_SERVICE_JUMPER, "SZERVIZ_JUMPER"},
 };
 
 String flagsToText(uint16_t flags, const char* separator) {

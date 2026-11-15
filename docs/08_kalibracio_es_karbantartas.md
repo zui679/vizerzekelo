@@ -33,9 +33,18 @@ A felbontott oldatok néhány hét alatt romlanak – mindig friss adagot haszn�
 
 1. Csatlakoztasd a laptopot USB-n (terepen: a TPL5110 felőli USB kábelt húzd ki, és a laptopot dugd a helyére).
 2. Soros monitor: **115200 baud**, **„Új sor”** (Newline).
-3. Nyomd meg az Arduino RESET gombját, és **3 másodpercen belül nyomj Entert** (vagy a D2 lábat
-   jumperrel GND-re kötve indítsd).
+3. Belépés:
+   - **Terepen (a kihelyezett doboznál):** tedd be a **szerviz jumpert** (D2–GND), és nyomd meg
+     az Arduino RESET gombját. Terepi beállításnál (`SERVICE_PROMPT_MS 0`) ez az egyetlen mód.
+   - **Tesztpadon:** RESET, majd **3 másodpercen belül Enter** (ha a `config.h`-ban
+     `SERVICE_PROMPT_MS 3000`) – vagy ugyanúgy a jumperrel.
 4. Megjelenik a menü, a LED mátrixon „S” betű.
+5. **A végén vedd ki a jumpert!** Biztonsági háló, ha mégis bent maradna:
+   - 10 perc tétlenség után a menü magától kilép, és a doboz normál módon mér tovább;
+   - a bent felejtett jumpert a doboz megjegyzi: nem lép újra szerviz módba (nem meríti az
+     akkut), és `SZERVIZ_JUMPER` állapotot küld a ThingSpeakre;
+   - feloldás: jumper ki → RESET (vagy megvárni a következő ébredést) → ezután a jumper
+     visszatehető, és újra működik.
 
 ## 8.4 pH kalibráció (2 pontos) – menü 2, majd 3
 

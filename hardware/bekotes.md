@@ -35,7 +35,7 @@
 ## 2. Tápellátás
 
 ```
-   NAPELEM (6 V)                                     ┌──────────────────────┐
+   NAPELEM (a töltőhöz illő!)                        ┌──────────────────────┐
    (+)───────────────────────► SOLAR IN              │                      │
    (−)───────────────────────► GND                   │  TÖLTÉSVEZÉRLŐ       │
                                                      │  (1S Li-ion, MPPT)   │
@@ -65,6 +65,10 @@
          └─────────── D3 (Arduino)
 ```
 
+- **A napelem feszültségét a töltésvezérlőhöz kell választani** (pl. DFR0559-hez 5 V-os,
+  Waveshare (C)-hez 6–12 V-os panel). Túl nagy feszültségű panel tönkreteszi a töltőt – lásd
+  [04_energiaellatas.md](../docs/04_energiaellatas.md) 4.1.1. Bekötés előtt mérd meg multiméterrel
+  a panel üresjárási feszültségét a napon!
 - Az Adafruit TPL5110 panelen a lábak neve: **VDD** (be), **DRV** vagy **OUT** (kapcsolt kimenet –
   a panel feliratát nézd!), **DONE**, **GND**, **DELAY** (kézi ébresztés). Időköz: a panelen lévő
   trimmerrel.
@@ -159,18 +163,40 @@ A DFRobot Gravity szenzorok 3 tűs csatlakozóval jönnek: **piros = +, fekete =
 
 ## 6. Kábelterv (dobozon kívülre menő kábelek)
 
-| Kábel | Erek | Tömszelence | Hossz |
-|---|---|---|---|
-| Napelem | 2 (+, −) | PG7 | a tartótól függ |
-| DS18B20 | 3 | PG7 | 2–3 m |
-| pH szonda (koax/BNC) | 1 koax | PG7 | 3–5 m (gyári kábel!) |
-| TDS szonda | 2 | PG7 | 2–3 m |
-| Zavarosság szenzor | 3 | PG7 | 2–3 m (hosszabbítva) |
-| DO szonda (opc.) | 1 koax | PG7 | gyári |
-| LTE antenna (ha kívül) | koax | PG7 / SMA átvezető | |
+**Mekkora kábel kell?** Mérd le a tényleges kábelutat a szonda hegyétől az erősítő panelig:
+
+```
+  doboz magassága a víz felett (≥ 1 m)  +  merülési mélység (~0,3 m)
+  +  vezetés a dobozon belül és a csepegtető ív (~0,5 m)   ≈   kb. 2 m
+```
+
+A gyári kábelek egy része ennél **rövidebb**, ezért ezeket hosszabbítani kell:
+
+| Kábel | Erek | Gyári hossz | Teendő | Tömszelence |
+|---|---|---|---|---|
+| Napelem | 2 (+, −) | változó | a tartótól függően méretre vágni | PG7 |
+| DS18B20 | 3 | 1 / 2 / 3 / 5 m-es kivitelben kapható | **eleve elég hosszút venni** (≥ 3 m) | PG7 |
+| pH szonda, ipari (SEN0169-V2) | 1 koax (BNC) | 5 m | elég hosszú – **tilos toldani vagy elvágni!** | PG7 |
+| TDS szonda (SEN0244) | 2 | **csak 83 cm** | **hosszabbítani kell** (lásd lent) | PG7 |
+| Zavarosság szenzor (SEN0189) | 3 | rövid (vásárlás után mérd le!) | **hosszabbítani kell** a szonda és az adapter panel között | PG7 |
+| DO szonda (opc.) | 1 koax (BNC) | gyári | ha rövid, a dobozt kell közelebb tenni – nem toldható | PG7 |
+| LTE antenna (ha kívül) | koax | gyári | – | PG7 / SMA átvezető |
+
+**Hosszabbítás (TDS és zavarosság szenzor) – felnőtt feladata:**
+- A toldás mindig a **víz felett** legyen (a szenzortartó cső felső részén vagy a dobozban),
+  soha ne merüljön víz alá.
+- Vezeték: 2, illetve 3 eres, kültéri (UV-álló) kábel, lehetőleg árnyékolt; ereként legalább 0,25 mm².
+- A toldást **forrasztani** kell, eresenként szigetelni, majd az egészre **ragasztós (belül
+  olvadó) zsugorcsövet** húzni – a sima zsugorcső nem vízzáró.
+- A kábel legyen olyan rövid, amilyen csak lehet (a szükségesnél ne hagyj rá métereket).
+- **Hosszabbítás után a szenzort újra kell kalibrálni**, mert a hosszabb kábel kicsit
+  megváltoztatja a jelet.
+- Ha a terepi próbán a hosszabbított TDS szonda jele zajos, a megoldás egy hosszabb gyári
+  kábelű (ipari) EC szonda.
 
 > A **pH szonda kábelét ne hosszabbítsd és ne vágd el** – nagyon nagy impedanciájú jelet visz, a
-> toldás tönkreteszi a mérést. Ha hosszabb kell, hosszabb kábelű szondát kell venni.
+> toldás tönkreteszi a mérést. Ha hosszabb kell, hosszabb kábelű szondát kell venni
+> (a kísérleti labor szonda kábele rövidebb, terepre ezért sem alkalmas).
 > Az analóg jeleket (A0–A2) a dobozon belül is minél rövidebben vezesd, távol a modemtől.
 
 ## 7. Szerviz jumper / reed relé

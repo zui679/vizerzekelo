@@ -9,7 +9,7 @@
 #pragma once
 #include <Arduino.h>
 
-#define FIRMWARE_VERSION "0.2.0"
+#define FIRMWARE_VERSION "0.2.1"
 
 // ---------------------------------------------------------------------
 // 1. ADATKÜLDÉS MÓDJA
@@ -99,9 +99,15 @@
 // A mérések közti időt TERMÉSZETESEN a TPL5110 időzítő ellenállása adja.
 // Ha nincs TPL5110 (pl. USB-ről megy a tesztpadon), ennyit vár a program:
 #define FALLBACK_INTERVAL_S   900     // 15 perc
-// Bekapcsolás után ennyi ideig lehet Enterrel szerviz módba lépni
-// (csak akkor, ha a soros monitor nyitva van).
+// Bekapcsolás után ennyi ideig lehet Enterrel szerviz módba lépni.
+// FONTOS: az UNO R4 WiFi nem tudja megállapítani, hogy van-e számítógép az
+// USB-n, ezért ez a várakozás MINDEN bekapcsoláskor lefut, és energiát fogyaszt.
+//   3000 = tesztpadon kényelmes (USB-ről megy, nem számít)
+//   0    = TEREPI BEÁLLÍTÁS: nincs várakozás, szerviz módba csak a jumper visz
 #define SERVICE_PROMPT_MS     3000
+// Ha a szerviz menüben ennyi másodpercig nem történik bevitel, a menü magától
+// kilép, és a doboz normál módon mér tovább (akkuvédelem).
+#define SERVICE_TIMEOUT_S     600     // 10 perc
 // Az eredmény ikon ennyi ideig látszik a LED mátrixon a lekapcsolás előtt.
 #define STATUS_SHOW_MS        1500
 
