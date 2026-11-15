@@ -2,6 +2,13 @@
 
 A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
 
+## [Nem kiadott]
+### Dokumentáció
+- Új [hardware/beszerzes.md](hardware/beszerzes.md): magyarországi beszerzési források az
+  oktatási készlethez (HESTORE, Hanna Instruments, mindenitt.hu), termékkódokkal, árakkal
+  (≈ 81 500 Ft, 4 csoport + tartalék). Megjegyzés a pH pufferről: a HESTORE 6,86-os pora
+  ~0,15 pH eltérést okoz, mert a program 7,00-ra kalibrál.
+
 ## [0.2.2] – 2026-11-15
 ### Javítások (átnézés alapján, 2. kör)
 - **Akkuküszöbök:** GSM módban magasabbak (figyelmeztetés 3,65 V, kritikus 3,50 V), mert a
