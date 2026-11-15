@@ -5,6 +5,8 @@
 > ellenőrizd az adatlapon a feszültségeket és csatlakozókat!
 >
 > **K** = kötelező · **O** = opcionális / ajánlott · **T** = tartalék (diákprojektnél jól jön)
+>
+> **Hol vegyük meg?** Magyarországi webshopok konkrét termékekkel: [beszerzes.md](beszerzes.md).
 
 ## 1. Vezérlés
 

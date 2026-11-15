@@ -54,6 +54,7 @@ Vizerzekelo/
 │   └── kepek/               ← fényképek, rajzok
 ├── hardware/
 │   ├── alkatreszlista.md    ← mit kell megvenni (BOM)
+│   ├── beszerzes.md         ← hol lehet megvenni (magyar webshopok)
 │   └── bekotes.md           ← lábkiosztás, kapcsolási rajzok
 ├── firmware/
 │   ├── README.md            ← fordítás, feltöltés, beállítás
