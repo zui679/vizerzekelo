@@ -99,7 +99,7 @@ A menüből lehet kalibrálni, élőben nézni a mért értékeket, kézzel AT p
 
 ```
 =============================================
-  VÍZÉRZÉKELŐ DOBOZ  v0.1.0
+  VÍZÉRZÉKELŐ DOBOZ  v0.2.2
   Adatküldés: WiFi
 =============================================
 Szerviz módhoz nyomj Entert 3 mp-en belül...

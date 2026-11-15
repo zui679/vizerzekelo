@@ -9,7 +9,7 @@ flowchart LR
     CHG -- 5 V --> TPL[TPL5110<br/>időzítő]
     TPL -- 5 V USB --> ARD[Arduino UNO R4 WiFi]
     ARD -- 5 V, kapcsolt --> SZ[Szenzorok]
-    BAT -- 3,4–4,2 V --> SW[P-MOSFET kapcsoló<br/>+ 1000 µF] --> MOD[LTE modem]
+    BAT -- 3,4–4,2 V --> SW[P-MOSFET kapcsoló<br/>lágy indítással] --> MOD[LTE modem]
     ARD -- D8 --> SW
     BAT -- osztó --> ARD
 ```
@@ -114,6 +114,12 @@ számítani, vagy árnyékos a hely:
 **Választás: Li-ion, 2 db védett 18650 cella párhuzamosan.** Ez a legegyszerűbb és legolcsóbb,
 és a hobbi napelemes töltőmodulok erre készülnek.
 
+> ⚠️ **Cellák párhuzamos kötése – csak felnőtt, és csak így:** a cellák legyenek **azonos
+> típusúak és korúak**, és összekötés előtt **azonos feszültségűek**. Előbb mindegyiket külön
+> töltsd fel teljesen, majd multiméterrel mérd meg: legfeljebb kb. 0,05 V lehet köztük a
+> különbség. Eltérő feszültségű cellák között összekötéskor nagy kiegyenlítő áram indul, ami
+> melegedést, szélső esetben tüzet okozhat. Ugyanez érvényes, ha később egy cellát cserélsz.
+
 **A téli töltés problémája:** a Li-ion cellát fagypont alatt tölteni tilos (a cella belsejében
 fémlítium válik ki, ami károsítja, szélsőséges esetben veszélyes). Megoldások:
 1. Olyan töltésvezérlőt válasszunk, amelynek van **NTC hőmérséklet-érzékelő bemenete**, és
@@ -141,8 +147,10 @@ Arduino a DONE lábon jelez („kész vagyok”), lekapcsolja.
 | Veszély | Védelem |
 |---|---|
 | Akku túltöltés | töltésvezérlő + védett cella (PCB) |
-| Akku mélykisütés | töltésvezérlő kikapcsol; a firmware 3,3 V alatt nem indítja a modemet |
+| Akku mélykisütés | töltésvezérlő kikapcsol; a firmware a kritikus küszöb alatt (GSM módban 3,5 V) nem mér, és nem indítja a modemet |
 | Rövidzár | **olvadóbiztosíték (pl. 3 A) közvetlenül az akku + pólusánál** |
+| Modem bekapcsolási áramlökése (megrántaná az akkufeszültséget, az Arduino újraindulna) | lágy indítású modem kapcsoló + 1000 µF puffer az akku oldalán ([bekotes.md](../hardware/bekotes.md) 3.2) |
+| Eltérő feszültségű cellák párhuzamos kötése | összekötés előtt külön feltölteni és megmérni (lásd 4.3) |
 | Fordított bekötés | polaritásjelölés, színkódolt vezetékek (piros +, fekete −), csatlakozók |
 | Töltés fagyban | NTC bemenetes töltő, hőszigetelés |
 | Napelem visszáram éjjel | a töltésvezérlők általában tartalmazzák; ha nem: Schottky dióda |

@@ -24,6 +24,10 @@ Arduinón) – áramütés veszélye nincs. A veszélyt az **akku** jelenti:
 - **Rövidzárlat** esetén a cella nagyon gyorsan felmelegszik, kigyulladhat. Az akku + pólusához
   közvetlenül **biztosíték** kerüljön. Fém tárgyat (csipesz, csavarhúzó) ne tegyünk a pólusok közé.
 - Csak **védett (PCB-s), márkás** cellát használjunk, jó minőségű tartóban.
+- **Cellákat párhuzamosan kötni csak akkor szabad, ha azonos típusúak, azonos korúak és azonos
+  feszültségűek.** Összekötés előtt mindegyiket külön teljesen fel kell tölteni, és multiméterrel
+  megmérni: legfeljebb kb. 0,05 V lehet köztük a különbség. Eltérő feszültségű cellák között
+  nagy kiegyenlítő áram indul – melegedés, tűzveszély. Cellacsere után ugyanez érvényes.
 - **Sérült, felfúvódott, horpadt, melegedő** cellát azonnal ki kell venni, fém dobozban / homokban
   tárolni, és a veszélyes hulladék gyűjtőbe vinni.
 - Ne töltsük felügyelet nélkül éjszakára az épületben (laborpadon).

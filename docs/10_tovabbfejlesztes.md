@@ -40,7 +40,7 @@ Az UNO R4-en szabad lábak: A5, D11, D12, D13, valamint a Qwiic / I2C busz (sok 
 | Ötlet | Miért jó? | Nehézség |
 |---|---|---|
 | **ADS1115** 16 bites külső ADC (I2C) | pontosabb, a tápfeszültség ingadozásától független feszültségmérés | ⭐⭐ |
-| **Galvanikus leválasztás** (pl. DFRobot Gravity Analog Signal Isolator) | a pH és EC szonda egyáltalán nem zavarja egymást | ⭐⭐ |
+| **Második leválasztó modul** a pH szenzorhoz is | ha a zavarás-próba az EC oldali leválasztó mellett is eltérést mutat | ⭐⭐ |
 | **Ipari EC szonda** (K=1) | tartósabb, pontosabb vezetőképesség-mérés | ⭐ |
 | **Akku hőmérséklet-figyelés** (NTC / második DS18B20) | fagyban ne töltsön, lássuk a doboz hőmérsékletét | ⭐⭐ |
 | **LiFePO4 akku** megfelelő töltővel | biztonságosabb, tartósabb (2000+ ciklus) | ⭐⭐ |
@@ -51,7 +51,7 @@ Az UNO R4-en szabad lábak: A5, D11, D12, D13, valamint a Qwiic / I2C busz (sok 
 
 ## 10.4 Energia
 
-| Ötlet | Hatás | Nehézság |
+| Ötlet | Hatás | Nehézség |
 |---|---|---|
 | A mérési időköz automatikus növelése alacsony akkunál | télen tovább bírja | ⭐⭐ (TPL5110 helyett pl. RTC alapú ébresztés kell) |
 | Kisebb fogyasztású vezérlő (pl. Arduino Nano / ESP32 mély alvással) | 2–3× kevesebb energia | ⭐⭐⭐ |

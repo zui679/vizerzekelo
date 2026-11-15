@@ -37,7 +37,7 @@ a folyó állapota napról napra, évszakról évszakra, egy-egy esőzés vagy s
 |---|---|---|
 | N1 | Akkuról működjön, lehetőleg önellátóan | Li-ion akku + 6 W napelem, mérések között teljes lekapcsolás |
 | N2 | Bírja a kültéri körülményeket | IP67 doboz, tömszelencék, szilikagél, páratartalom-figyelés |
-| N3 | Legyen megfizethető és beszerezhető | hobbi alkatrészek, kb. 125–180 ezer Ft (Arduino és DO szonda nélkül, lásd [alkatrészlista](../hardware/alkatreszlista.md)) |
+| N3 | Legyen megfizethető és beszerezhető | hobbi alkatrészek, kb. 140–200 ezer Ft (Arduino és DO szonda nélkül, lásd [alkatrészlista](../hardware/alkatreszlista.md)) |
 | N4 | Legyen érthető diákoknak is | moduláris felépítés, magyar kommentek, tesztprogramok |
 | N5 | Legyen bővíthető | konfigurálható szenzorok, szabad lábak, dokumentált interfészek |
 | N6 | Legyen biztonságos | alacsony feszültség, felnőtt felügyelet, akkuvédelem |

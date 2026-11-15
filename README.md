@@ -26,7 +26,7 @@ flowchart LR
     B --> P[TPL5110<br/>időzítő] --> A
 ```
 
-> **Állapot:** tervezési fázis, v0.1 – a firmware lefordul az UNO R4 WiFi-re, de a hardvert
+> **Állapot:** tervezési fázis (verzió: lásd [CHANGELOG.md](CHANGELOG.md)) – a firmware lefordul az UNO R4 WiFi-re, de a hardvert
 > még nem építettük meg és nem teszteltük. A tapasztalatok alapján a dokumentáció változni fog.
 
 ---

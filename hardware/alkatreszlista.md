@@ -27,6 +27,7 @@
 | 2.6 | Zavarosság szenzor | DFRobot Gravity Analog Turbidity Sensor (SEN0189) | 1 | 4 000 | K | felső része kiöntendő! |
 | 2.7 | Oldott oxigén szenzor | DFRobot Gravity Analog Dissolved Oxygen Sensor (SEN0237) | 1 | 60 000–80 000 | O | karbantartásigényes |
 | 2.8 | Doboz klíma szenzor | BME280 Qwiic panel (pl. SparkFun / Adafruit) + Qwiic kábel | 1 | 4 000–8 000 | K | beázásjelzés |
+| 2.9 | Leválasztó modul a TDS/EC szenzorhoz | DFRobot Gravity Analog Signal Isolator (DFR0504) | 1 | 13 000–18 000 | K (terepre) | megszünteti a pH ↔ EC zavarást a vízen keresztül; kísérletekhez nem kell. Lásd [bekotes.md](bekotes.md) 5. pont |
 
 ## 3. Kommunikáció
 
@@ -43,7 +44,7 @@
 |---|---|---|---|---|---|---|
 | 4.1 | Napelem | kb. 6 W (vagy 10 W) monokristályos, kültéri. **Feszültség a 4.2 töltőhöz:** DFR0559-hez **5 V-os**, Waveshare (C)-hez 6 / 9 / 12 V-os | 1 | 5 000–9 000 | K | **a panel üresjárási feszültsége (Voc) legyen a töltő max. bemenete alatt**, különben a töltő tönkremegy – lásd [04_energiaellatas.md](../docs/04_energiaellatas.md) 4.1.1 |
 | 4.2 | Napelemes töltésvezérlő | 1S Li-ion, MPPT, 5 V ≥1 A kimenet. Példák: DFRobot Solar Power Manager 5V (DFR0559; bemenet 4,5–6 V) **vagy** Waveshare Solar Power Manager (C) (bemenet 6–24 V, 3×18650 foglalat) | 1 | 6 000–12 000 | K | a napelemmel **párban** kell választani; előny: NTC (hőmérséklet) bemenet |
-| 4.3 | Li-ion cella | 18650, **védett (PCB)**, márkás, 3000–3500 mAh | 2 | 2 × 3 000 | K | |
+| 4.3 | Li-ion cella | 18650, **védett (PCB)**, márkás, 3000–3500 mAh | 2 | 2 × 3 000 | K | **azonos típus és kor; párhuzamosan kötni csak azonos feszültségen szabad** – lásd [09_biztonsag.md](../docs/09_biztonsag.md) |
 | 4.4 | Akkutartó | 2 × 18650, **párhuzamos** bekötésű | 1 | 800 | K | vagy forrfüles cellák, felnőtt szerelje. Nem kell, ha a töltő panelen van akkufoglalat (pl. Waveshare (C)) |
 | 4.5 | Biztosíték + tartó | 3 A, autós mini lapos vagy üvegcsöves, vezetékbe köthető | 1 | 800 | K | az akku + pólusánál! |
 | 4.6 | Időzítő | **Adafruit TPL5110** Low Power Timer Breakout | 1 | 2 500 | K | |
@@ -51,7 +52,7 @@
 | 4.8 | USB-A – USB-C kábel | rövid, 20–30 cm | 1 | 1 000 | K | |
 | 4.9 | Ellenállások feszültségosztóhoz | 470 kΩ | 2 | – | K | |
 | 4.10 | Kondenzátor | 100 nF kerámia | 2 | – | K | A3 szűrés, tápszűrés |
-| 4.11 | Elektrolit kondenzátor | 1000 µF / 10 V, low-ESR | 1–2 | 300 | K | a modem VBAT-jához |
+| 4.11 | Elektrolit kondenzátor | 1000 µF / 10 V, low-ESR | 1–2 | 300 | K | puffer az akku oldalán, a modem kapcsoló **előtt** – [bekotes.md](bekotes.md) 3.2 |
 
 ## 5. Tápkapcsolók (szenzorok + modem)
 
@@ -60,8 +61,9 @@ Lásd [bekotes.md](bekotes.md) 3. pont. 4 db (pH, EC, zavarosság, modem) + 1 op
 | # | Alkatrész | Példa típus | Db | Kb. ár | | Megjegyzés |
 |---|---|---|---|---|---|---|
 | 5.1 | P-csatornás logikai MOSFET | AO3401A / DMG2305UX / IRLML6402 (SOT-23) – vagy TO-92 / TO-220 tokú, alacsony küszöbű P-FET | 5 (+3 T) | 2 000 | K | SOT-23-hoz átalakító panel kell; a modemhez kis R<sub>DS(on)</sub> fontos (< 60 mΩ) |
-| 5.2 | NPN tranzisztor | BC547 / 2N2222 / 2N3904 | 5 (+3 T) | 500 | K | |
-| 5.3 | Ellenállás | 1 kΩ (bázis) és 10 kΩ (gate felhúzó) | 5–5 | – | K | |
+| 5.2 | NPN tranzisztor | BC547 / 2N2222 / 2N3904 | 6 (+3 T) | 500 | K | 5 a tápkapcsolókhoz + 1 a modem PWRKEY meghajtásához |
+| 5.3 | Ellenállás | 1 kΩ (bázis) és 10 kΩ (gate); a modem kapcsolóhoz 100 kΩ is | 6 / 5 / 1 | – | K | |
+| 5.3b | Kerámia kondenzátor | 1 µF (a modem kapcsoló lágy indításához) | 1 (+2 T) | – | K | [bekotes.md](bekotes.md) 3.2 |
 | 5.4 | Ellenállás-készlet | vegyes E12 | 1 | 2 000 | O | |
 
 *Egyszerűsítés:* kész „high-side MOSFET switch” / „load switch” modulok is használhatók, ha 3,3–5 V-os vezérléssel működnek.
@@ -127,13 +129,13 @@ lépcsős fúró, melegragasztó pisztoly, hőlégfúvó, védőszemüvegek, USB
 
 | Csoport | Kb. ár |
 |---|---|
-| Szenzorok (DO nélkül) | 45 000–60 000 |
+| Szenzorok (DO nélkül, leválasztó modullal) | 58 000–78 000 |
 | Kommunikáció | 10 000–20 000 |
 | Energiaellátás | 25 000–35 000 |
 | Kapcsolók, apró alkatrészek | 5 000 |
 | Mechanika | 25 000–40 000 |
 | Fogyóeszközök, vegyszerek | 15 000–20 000 |
-| **Összesen (DO nélkül, Arduino nélkül)** | **≈ 125 000–180 000 Ft** |
+| **Összesen (DO nélkül, Arduino nélkül)** | **≈ 140 000–200 000 Ft** |
 | + oldott oxigén szenzor | + 70 000–90 000 |
 | + oktatási szenzorkészlet (4 csoport + közös eszközök) | + 55 000–70 000 |
 | Havi üzemeltetés (SIM) | 500–2 000 Ft/hó |

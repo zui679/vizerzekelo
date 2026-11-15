@@ -8,7 +8,8 @@
 //  Bekötés (részletesen: hardware/bekotes.md):
 //    D0 (RX) ← szintillesztő ← modem TX
 //    D1 (TX) → szintillesztő → modem RX
-//    D8 → modem tápkapcsoló,  D9 → modem PWRKEY
+//    D8 → modem tápkapcsoló
+//    D9 → 1 kΩ → NPN tranzisztor → modem PWRKEY  (SOHA ne közvetlenül – 5 V károsíthatja!)
 //
 //  Soros monitor: 115200 baud, "Mindkettő NL és CR" (Both NL & CR).
 //

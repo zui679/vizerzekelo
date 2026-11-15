@@ -19,7 +19,8 @@ Az A7670E chip maga apró, forraszthatatlan – **kész modulpanelt** kell venni
 
 - ✅ **LTE + Európai sávok** (az „E” végződés: Európa; pl. A7670**E**, SIM7600**E**).
 - ✅ **VBAT bemenet** (3,4–4,2 V), hogy közvetlenül az akkuról táplálhassuk.
-- ✅ **PWRKEY láb** kivezetve.
+- ✅ **PWRKEY láb** kivezetve (az Arduino tranzisztoron át vezérli, soha nem közvetlenül – lásd
+  [bekotes.md](../hardware/bekotes.md) 4. pont).
 - ✅ **UART szintillesztés**: a modem chip 1,8 V-os logikájú; a panelek többsége ezt 3,3 V-ra
   alakítja. Az UNO R4 5 V-os, ezért közé **kétirányú szintillesztő** (BSS138 alapú modul) kell –
   hacsak a panel nem 5 V-tűrő (pl. egyes Waveshare panelek 3,3/5 V választó jumperrel).
@@ -127,7 +128,8 @@ lehet próbálni – nagyon tanulságos!
 | Tünet | Lehetséges ok |
 |---|---|
 | Nincs válasz az `AT`-re | TX/RX felcserélve; nincs közös GND; rossz baud; a modem nincs bekapcsolva (PWRKEY); nincs szintillesztő |
-| A modem újraindul küldéskor | gyenge táp: vékony vezeték, hiányzó 1000 µF-os kondenzátor, lemerült akku |
+| A modem újraindul küldéskor | gyenge táp: vékony vezeték, hiányzó 1000 µF-os puffer kondenzátor, lemerült akku (ilyenkor a kritikus akkuküszöb emelése segít – `config.h`) |
+| Az Arduino újraindul, amikor a modem bekapcsol | bekapcsolási áramlökés: hiányzik vagy hibás a modem kapcsoló lágy indítása ([bekotes.md](../hardware/bekotes.md) 3.2) |
 | `+CPIN: SIM PIN` | PIN kérés bekapcsolva → telefonban kikapcsolni |
 | `+CEREG: 0,2` sokáig | keresi a hálózatot: antenna? lefedettség? |
 | `+CEREG: 0,3` | a hálózat elutasította: SIM nincs aktiválva / lejárt |

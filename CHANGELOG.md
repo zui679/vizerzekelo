@@ -2,6 +2,21 @@
 
 A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
 
+## [0.2.2] – 2026-11-15
+### Javítások (átnézés alapján, 2. kör)
+- **Akkuküszöbök:** GSM módban magasabbak (figyelmeztetés 3,65 V, kritikus 3,50 V), mert a
+  modemnek legalább 3,4 V kell, és adás közben a feszültség beesik. Kiinduló értékek, hardveren hangolandók.
+- **Modem kapcsoló:** lágy indítás (1 µF gate–source, 100 kΩ felhúzó, 10 kΩ soros), az
+  1000 µF puffer az akku oldalára került – a bekapcsolási áramlökés ne indítsa újra az Arduinót.
+  Számított értékek, hardveren még nem próbáltuk ki.
+- **PWRKEY:** az Arduino 5 V-os lába nem mehet közvetlenül a modemre; NPN tranzisztoros meghajtás.
+- **pH ↔ EC zavarás:** a terepi dobozba leválasztó modul (DFR0504) került a TDS/EC szenzorhoz;
+  új „Zavarás-próba” lépés az összeszerelési útmutatóban.
+- **Biztonság:** cellákat párhuzamosan kötni csak azonos feszültségen szabad.
+- **Apróságok:** elavult verziószámok a README-kben, elírás a 10. fejezetben; az `AKKU_KRITIKUS`
+  állapot leírása pontosítva (a doboz ilyenkor nem küld, ezért a ThingSpeaken nem jelenik meg).
+- Alkatrészlista és költségbecslés frissítve (≈ 140–200 ezer Ft).
+
 ## [0.2.1] – 2026-11-15
 ### Javítások (átnézés alapján)
 - **Napelem–töltő párosítás:** a dokumentáció 6 V-os panelt írt a DFRobot DFR0559 töltő mellé,

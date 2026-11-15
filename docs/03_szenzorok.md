@@ -182,7 +182,11 @@ A szondák ugyanabban a vízben vannak, a víz pedig vezető. Ezért:
 1. **Egyszerre csak egy analóg szenzor kap tápot** (a firmware így működik, ha a tápkapcsolók be vannak kötve).
 2. A szondák között legyen **legalább 5–10 cm** távolság a tartócsőben.
 3. A modem adása zavarhatja a pH mérést → ha zajos a pH, `MODEM_EARLY_START 0`.
-4. Haladó megoldás: **galvanikus leválasztó** (pl. DFRobot Gravity Analog Signal Isolator) a pH és EC jelútba.
+4. A terepi dobozban a TDS/EC szenzor **galvanikus leválasztó modulon** (DFRobot Gravity Analog
+   Signal Isolator, DFR0504) át csatlakozik. Ez a gyártó által ajánlott megoldás, és folyamatos
+   mérésnél megbízhatóbb, mint önmagában a táp váltogatása. Bekötés: [bekotes.md](../hardware/bekotes.md) 5. pont.
+5. Az összeszereléskor **zavarás-próbát** végzünk ([07_osszeszereles.md](07_osszeszereles.md)) –
+   csak a mérés mutatja meg, hogy a szondák tényleg nem zavarják egymást.
 
 ## 3.8 Mit NEM mérünk – és miért?
 
