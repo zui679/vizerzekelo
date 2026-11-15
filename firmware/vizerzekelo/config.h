@@ -9,7 +9,7 @@
 #pragma once
 #include <Arduino.h>
 
-#define FIRMWARE_VERSION "0.2.1"
+#define FIRMWARE_VERSION "0.2.2"
 
 // ---------------------------------------------------------------------
 // 1. ADATKÜLDÉS MÓDJA
@@ -89,8 +89,20 @@
 // ---------------------------------------------------------------------
 // Feszültségosztó: akku+ ── R1 ── A3 ── R2 ── GND.  Arány = (R1+R2)/R2
 #define BATTERY_DIVIDER_RATIO 2.00f
-#define BATTERY_LOW_V         3.50f   // ez alatt: figyelmeztetés
-#define BATTERY_CRITICAL_V    3.30f   // ez alatt: nem mérünk, nem küldünk (akkuvédelem)
+// Akkuküszöbök (terheletlen akkufeszültség, a ciklus elején mérve):
+//   BATTERY_LOW_V alatt:      AKKU_GYENGE figyelmeztetést küldünk
+//   BATTERY_CRITICAL_V alatt: nem mérünk és nem küldünk (akkuvédelem)
+// GSM módban magasabbak a küszöbök: a modemnek legalább 3,4 V kell, és adás
+// közben (akár 2 A) a feszültség a vezetékeken és a kapcsolón 0,1-0,3 V-ot esik.
+// Ezek KIINDULÓ értékek – hardveren hangolni kell: ha a modem gyenge akkunál
+// küldés közben újraindul, emeld a kritikus küszöböt.
+#if TRANSPORT_MODE == TRANSPORT_GSM
+  #define BATTERY_LOW_V       3.65f
+  #define BATTERY_CRITICAL_V  3.50f
+#else
+  #define BATTERY_LOW_V       3.50f
+  #define BATTERY_CRITICAL_V  3.30f
+#endif
 #define BOX_HUMIDITY_ALARM    80.0f   // % – ha a dobozban ennél párásabb: beázás gyanú!
 
 // ---------------------------------------------------------------------
@@ -116,8 +128,10 @@
 // ---------------------------------------------------------------------
 #define MODEM_SERIAL               Serial1
 #define MODEM_BAUD                 115200
-// A legtöbb modul-panelen a PWRKEY egy tranzisztoron keresztül megy:
-// Arduino HIGH → PWRKEY alacsony (= gombnyomás). Ilyenkor 1.
+// A D9-et SOHA ne kösd közvetlenül a modem PWRKEY lábára (5 V károsíthatja)!
+// Bekötés: D9 → 1 kΩ → NPN tranzisztor → PWRKEY (hardware/bekotes.md, 4. pont).
+// Így Arduino HIGH = PWRKEY lehúzva = "gombnyomás" → az érték 1.
+// (Ha a modem panelen már van ilyen tranzisztor, akkor is 1 marad.)
 #define MODEM_PWRKEY_ACTIVE_HIGH   1
 #define MODEM_PWRKEY_PULSE_MS      1200
 #define MODEM_BOOT_TIMEOUT_MS      20000UL

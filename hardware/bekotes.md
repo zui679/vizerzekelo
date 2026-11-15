@@ -19,7 +19,7 @@
 | **D6** | ki | EC/TDS tápkapcsoló | HIGH = BE |
 | **D7** | ki | zavarosság tápkapcsoló | HIGH = BE |
 | **D8** | ki | modem tápkapcsoló | HIGH = BE |
-| **D9** | ki | modem PWRKEY (a panel bemenetére) | lásd 4. pont |
+| **D9** | ki | modem PWRKEY – **NPN tranzisztoron át**, nem közvetlenül | lásd 4. pont |
 | **D10** | ki | DO tápkapcsoló (opcionális) | HIGH = BE |
 | D11–D13, A5 | – | szabad | bővítéshez |
 | **A0** | be | pH panel jelkimenet | |
@@ -80,35 +80,65 @@
 
 Egy Arduino láb közvetlenül nem tud elég áramot adni (max. ~8 mA) – ezért egy tranzisztor és egy
 MOSFET kapcsolja a tápot. **Arduino láb HIGH → a fogyasztó BE.** Ha az Arduino ki van kapcsolva,
-a 10 kΩ-os felhúzó ellenállás miatt a fogyasztó biztosan KI van kapcsolva.
+a felhúzó ellenállás miatt a fogyasztó biztosan KI van kapcsolva.
+
+### 3.1 Szenzor tápkapcsoló (pH, EC, zavarosság, DO)
 
 ```
-        Bemenet: +5 V (szenzoroknál)  vagy  VBAT (modemnél)
-                    │
-                    ├───────────────┐
-                    │               │
-                  ┌─┴─┐             │ S (source)
-                  │10k│         ┌───┴───┐
-                  └─┬─┘    G    │P-MOSFET│  pl. AO3401A / DMG2305UX
-                    ├───────────┤       │
-                    │           └───┬───┘
-                    │               │ D (drain)
-                    │ C             └──────────► KIMENET a szenzor/modem "+" lábára
-                  ┌─┴─┐                          (modemnél: + 1000 µF a GND felé,
-   Arduino Dx ──┤1k├──┤ B  NPN (BC547)            közvetlenül a modem mellett)
-                  └───┘ │
-                        │ E
-                        │
-                       GND
+   +5 V ─────────┬──────────────────┐
+                 │                  │ S (source)
+              [10 kΩ]           ┌───┴────┐
+                 │         G    │P-MOSFET│   pl. AO3401A / DMG2305UX
+                 ├──────────────┤        │
+                 │              └───┬────┘
+                 │ C                │ D (drain)
+   Dx ─[1 kΩ]──B  NPN               └────────────► a szenzor "+" lába
+                 │ E   (BC547 / 2N2222)
+                GND
 ```
 
-| Kapcsoló | Vezérlő láb | Bemenet | Terhelés |
-|---|---|---|---|
-| pH | D5 | +5 V | ~10 mA |
-| EC/TDS | D6 | +5 V | ~5 mA |
-| Zavarosság | D7 | +5 V | ~40 mA |
-| DO (opc.) | D10 | +5 V | ~5 mA |
-| **Modem** | D8 | **VBAT** | **csúcsban 2 A!** – kis R<sub>DS(on)</sub> MOSFET, vastag vezeték |
+### 3.2 Modem tápkapcsoló – lágy indítással
+
+A modem panelen nagy kondenzátorok vannak. Ha a kapcsoló hirtelen kapcsolna be, ezek egy
+pillanatra nagyon nagy áramot vennének fel, ami **megrántaná az akku feszültségét** – arról
+pedig az Arduino 5 V-ja is készül, tehát az Arduino újraindulhatna. Két dolgot teszünk ez ellen:
+
+1. A nagy, **1000 µF-os puffer kondenzátor a kapcsoló ELŐTT**, az akku oldalán van (nem utána):
+   így nem a kapcsolón át töltődik fel, és a modem áramcsúcsait is ő szolgálja ki.
+2. **Lágy indítás:** a MOSFET gate-je és source-a közé tett 1 µF-os kondenzátor miatt a
+   kapcsoló nem egy pillanat alatt, hanem néhány ezredmásodperc alatt nyit ki.
+
+```
+   VBAT ──┬─────────┬───────────┬───────────────┐
+  (akku,  │         │           │               │ S (source)
+  bizt.   │      [100 kΩ]     [1 µF]        ┌───┴────┐
+  után) [1000 µF]   │           │      G    │P-MOSFET│  kis ellenállású típus
+          │         ├───────────┴───────────┤        │  (R_DS(on) < 60 mΩ)
+         GND        │                       └───┬────┘
+                 [10 kΩ]                        │ D (drain)
+                    │ C                         └────────► modem VBAT
+   D8 ─[1 kΩ]────B  NPN                                    (rövid, vastag vezeték)
+                    │ E
+                   GND
+```
+
+- A 100 kΩ és az 1 µF **mindkettő a VBAT (source) és a gate között** van; a 10 kΩ a gate és
+  az NPN tranzisztor kollektora között.
+- Bekapcsolás: kb. 5–20 ms alatt nyit ki. Kikapcsolás: kb. 0,1–0,2 s (a firmware a modem
+  leállítása után 3 másodpercet vár, ez bőven elég).
+- **Ezek számított kiinduló értékek, hardveren még nem próbáltuk ki.** Az első
+  összeépítéskor ellenőrizd: a modem bekapcsolásakor (D8 HIGH) az Arduino nem indulhat újra,
+  és a modem VBAT lábán meg kell jelennie az akkufeszültségnek. Ha az Arduino mégis újraindul,
+  növeld az 1 µF-ot (pl. 2,2 µF-ra); ha a modem nem kap teljes feszültséget, ellenőrizd a
+  MOSFET típusát és a bekötést.
+
+| Kapcsoló | Kapcsolás | Vezérlő láb | Bemenet | Terhelés |
+|---|---|---|---|---|
+| pH | 3.1 | D5 | +5 V | ~10 mA |
+| EC/TDS (+ leválasztó modul) | 3.1 | D6 | +5 V | ~5 mA + a leválasztó modul |
+| Zavarosság | 3.1 | D7 | +5 V | ~40 mA |
+| DO (opc.) | 3.1 | D10 | +5 V | ~5 mA |
+| **Modem** | **3.2** | D8 | **VBAT** | **csúcsban 2 A!** – kis R<sub>DS(on)</sub> MOSFET, vastag vezeték |
 
 > **Tápkapcsolók nélkül is működik** (pl. az első kísérleteknél): ekkor a szenzorok + lábát
 > közvetlenül az 5 V-ra kötjük. A firmware ugyanúgy fut, csak a pH és az EC zavarhatják egymást.
@@ -125,25 +155,46 @@ a 10 kΩ-os felhúzó ellenállás miatt a fogyasztó biztosan KI van kapcsolva.
    D1 (TX) ──────────►  HV1            │ LV1 ─────────────► RXD
    D0 (RX) ◄──────────  HV2            │ LV2 ◄───────────── TXD
                                                               
-   D9  ───────────────────────────────────────────────────► PWRKEY (vagy "PWR", "K")
-   D8  ───► MODEM TÁPKAPCSOLÓ (3. pont) ──┬────────────────► VBAT
-                                          │
-                                       1000 µF  (+ a VBAT-on, − a GND-n)
-                                          │
-                                         GND ──────────────► GND
+   D9  ──[1 kΩ]── NPN tranzisztor ─────────────────────────► PWRKEY (vagy "PWR", "K")
+                  (lásd lent – SOHA ne közvetlenül!)
+   D8  ───► MODEM TÁPKAPCSOLÓ (3.2 pont) ──────────────────► VBAT
+            (az 1000 µF az akku oldalán)
+   GND ────────────────────────────────────────────────────► GND
                                                               ANT ◄── LTE antenna
                                                               SIM ◄── nano/micro SIM
 ```
+
+### A PWRKEY bekötése – az Arduino 5 V-ja nem mehet rá közvetlenül!
+
+A PWRKEY a modem „bekapcsoló gombja”: ha egy ideig a GND-re húzzuk, a modem elindul.
+A modem chip alacsony feszültségű logikával működik, ezért **az Arduino 5 V-os lábát soha
+nem kötjük közvetlenül a PWRKEY-re** – tönkretehetné a modemet. Helyette egy NPN tranzisztor
+„nyomja meg a gombot” (csak lehúzni tud a GND-re, feszültséget nem ad rá):
+
+```
+                          modem PWRKEY
+                               │
+                               │ C
+   D9 ──[1 kΩ]──────────────B  NPN  (BC547 / 2N2222)
+                               │ E
+                              GND
+```
+
+- Arduino D9 HIGH → a tranzisztor lehúzza a PWRKEY-t → „gombnyomás”. A `config.h`-ban
+  `MODEM_PWRKEY_ACTIVE_HIGH 1` (ez az alapérték).
+- **Mindig ezzel a bekötéssel kezdj – ez minden modem panelnél biztonságos.**
+- Egyes modem paneleken **már van** ilyen tranzisztor (a panel leírása vagy kapcsolási rajza
+  mutatja; a bemenet neve gyakran „PWR” vagy „K”). Ezeknél a fenti kapcsolással a modem nem
+  indul el – ilyenkor, **és csak ilyenkor**, a D9 egy 1 kΩ-os soros ellenálláson át köthető a
+  panel bemenetére. A beállítás ekkor is 1 marad.
+- Egyes panelek tápra maguktól bekapcsolnak – a firmware ezt is kezeli (ilyenkor a PWRKEY-t
+  nem is kell bekötni).
 
 Figyelem:
 - **TX → RX, RX → TX** (keresztben)!
 - A szintillesztő LV oldalát a modem panel **saját logikai feszültségéről** tápláld (gyakran
   „VDD_EXT”, „VCCIO” vagy „3V3” felirat). Ha a panel 5 V-os logikát is elfogad (pl. jumperrel
   választható), a szintillesztő elhagyható.
-- **PWRKEY:** a legtöbb panelen a PWRKEY bemenet egy tranzisztorra megy, és **HIGH impulzus** kapcsolja be
-  (`MODEM_PWRKEY_ACTIVE_HIGH 1`). Ha a panelen a PWRKEY közvetlenül a modemre megy (alacsony aktív),
-  akkor egy NPN tranzisztorral kell GND-re húzni, és a beállítás ugyanígy 1 marad; ha fordított a logika, 0.
-  Egyes panelek tápra maguktól bekapcsolnak – a firmware ezt is kezeli.
 - A modem tápvezetéke legyen **rövid** és **vastag** (≥ 0,5 mm²).
 - **Antenna nélkül ne kapcsold be!**
 
@@ -153,13 +204,37 @@ Figyelem:
 |---|---|---|---|---|
 | DS18B20 | 5 V | GND | D4 (sárga) | 4,7 kΩ D4 ↔ 5 V |
 | pH panel | pH tápkapcsoló kimenet | GND | A0 (kék) | a szonda BNC-vel a panelhez |
-| TDS panel | EC tápkapcsoló kimenet | GND | A1 | |
+| TDS panel | a **leválasztó modul** szenzor oldali kimenete | a leválasztó modul szenzor oldala | a leválasztó modulon át → A1 | lásd lent |
 | Zavarosság panel | zavarosság tápkapcsoló kimenet | GND | A2 | **kapcsoló „A” állásban** (analóg) |
 | DO panel (opc.) | DO tápkapcsoló kimenet | GND | A4 | |
 | BME280 | Qwiic | Qwiic | Qwiic | |
 
 A DFRobot Gravity szenzorok 3 tűs csatlakozóval jönnek: **piros = +, fekete = −, kék/zöld = jel**
 (a színek gyártónként eltérhetnek – nézd meg a panel feliratát!).
+
+### Leválasztó modul a TDS/EC szenzorhoz (terepi dobozban)
+
+A TDS szenzor váltakozó feszültséget ad a vízre, ami a vízen keresztül megzavarja a pH
+mérést. A gyártó megoldása erre a **galvanikus leválasztó modul** (DFRobot Gravity Analog
+Signal Isolator, DFR0504): a szenzor táplálását és jelét is elválasztja az Arduinótól, így a
+víz felől nincs elektromos kapcsolat a többi szenzor felé.
+
+```
+   EC tápkapcsoló (D6) ──► ┌───────────────────────┐ ──► TDS panel "+"
+   GND ──────────────────► │  LEVÁLASZTÓ MODUL     │ ──► TDS panel "−"
+   A1  ◄────────────────── │  Arduino    │ szenzor │ ◄── TDS panel jel
+                           │  oldal      │ oldal   │
+                           └───────────────────────┘
+```
+
+- A modul két csatlakozója közül az egyik az Arduino, a másik a szenzor felé megy – a
+  panel feliratát nézd meg; a Gravity kábelekkel forrasztás nélkül összedugható.
+- A modult is az **EC tápkapcsoló** táplálja, így csak az EC mérés idejére kap áramot.
+- A modul kimenete a tápfeszültség pontosságától is függ, ezért **az EC kalibrálást a
+  beépített modullal együtt** kell elvégezni. Ha az EC érték a mérés alatt még „kúszik”,
+  növeld a `WARMUP_EC_MS` értékét a `config.h`-ban.
+- Hogy tényleg megszűnt-e a zavarás, azt a [07_osszeszereles.md](../docs/07_osszeszereles.md)
+  „zavarás-próbája” mutatja meg – ezt a modullal és nélküle is érdemes elvégezni.
 
 ## 6. Kábelterv (dobozon kívülre menő kábelek)
 

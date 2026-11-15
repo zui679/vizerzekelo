@@ -65,18 +65,47 @@ melegragasztó pisztoly, zsugorcső + hőlégfúvó/öngyújtó, laptop Arduino 
 4. **10-es menüpont:** mérés + küldés → ✅ adatok a ThingSpeakben, minden mező kitöltve.
 5. Kilépés (0) → a program 15 percenként mér (TPL5110 nélkül a beépített várakozással).
 
+## 7/b. Zavarás-próba: zavarják-e egymást a szondák? 👧🧑‍🔧
+
+A szondák ugyanabban a vízben vannak, és a vízen át megzavarhatják egymást (főleg a TDS/EC
+szenzor a pH mérést). Hogy a védelem (felváltott táp + leválasztó modul) tényleg működik-e,
+azt csak méréssel lehet eldönteni. A próbához csapvizet használunk, mert a vezetőképessége
+hasonló a folyóvízéhez.
+
+1. Tölts egy nagyobb pohárba csapvizet. Tedd bele **csak a pH szondát** és a vízhőmérőt.
+   Szerviz menü **1-es pont** (élő mérés): jegyezd fel 5 egymást követő mérés pH értékét.
+2. Tedd **ugyanabba a pohárba a TDS/EC szondát és a zavarosság szenzort is** (ne érjenek
+   egymáshoz). Újabb 5 mérés: jegyezd fel a pH-t és az EC-t.
+3. Vedd ki a pH szondát, és mérd meg az EC-t még 5-ször.
+4. **Értékelés** (az átlagokat hasonlítsd össze):
+   - a pH a többi szondával és nélkülük legfeljebb **0,1**-et térhet el;
+   - az EC a pH szondával és nélküle legfeljebb kb. **5%**-ot térhet el.
+5. Ha nagyobb az eltérés: tényleg egyszerre csak egy szenzor kap tápot (tápkapcsolók)? Jól van
+   bekötve a leválasztó modul? Elég messze vannak egymástól a szondák?
+6. 👧 Jó kísérlet: végezzétek el a próbát a leválasztó modullal **és nélküle** is – mekkora a
+   különbség?
+
 ## 8. Modem 🧑‍🔧
 
 1. Helyezd be a SIM kártyát (a PIN kérés előtte telefonban kikapcsolva!), csatlakoztasd az antennát.
    **Antenna nélkül soha ne kapcsold be a modemet** – a rádiós kimenet károsodhat.
-2. Kösd be: akku → modem kapcsoló → 1000 µF → modem VBAT; szintillesztő; D0/D1; D8; D9 ([bekotes.md](../hardware/bekotes.md) 4. pont).
+2. Kösd be a [bekotes.md](../hardware/bekotes.md) 3.2 és 4. pontja szerint: akku (+ 1000 µF puffer) →
+   lágy indítású modem kapcsoló → modem VBAT; szintillesztő; D0/D1; D8;
+   **D9 NPN tranzisztoron át a PWRKEY-re – soha ne közvetlenül!**
    A modem tápvezetéke legyen **rövid és vastag** (min. 0,5 mm², inkább 0,75 mm²).
 3. [`05_modem_at_konzol`](../firmware/tesztek/05_modem_at_konzol/) → kézzel: `AT`, `AT+CPIN?`, `AT+CSQ`, `AT+CEREG?` 👧 (diákok gépelhetnek!)
 4. Fő program: `TRANSPORT_MODE TRANSPORT_GSM` → szerviz mód **10-es menüpont** → ✅ adat a ThingSpeakben.
+5. **Áramlökés-próba:** figyeld a soros monitort, amikor a modem bekapcsol. Ha az Arduino
+   ilyenkor újraindul (újra megjelenik a kezdő fejléc), a modem kapcsoló lágy indítása nem
+   működik jól – lásd [bekotes.md](../hardware/bekotes.md) 3.2.
+6. **Zavarás-próba modemmel:** ismételd meg a 7/b pont próbáját GSM módban is. Ha a pH a
+   modem mellett zajosabb, állítsd a `config.h`-ban: `MODEM_EARLY_START 0`.
 
 ## 9. Energiaellátás 🧑‍🔧
 
-1. Akku (biztosítékkal!) → töltésvezérlő. Napelem → töltésvezérlő. Ellenőrizd multiméterrel a
+1. **A cellákat csak azonos feszültségen szabad párhuzamosan kötni:** előbb külön töltsd fel
+   mindet, és multiméterrel ellenőrizd (legfeljebb kb. 0,05 V különbség – [09_biztonsag.md](09_biztonsag.md)).
+   Akku (biztosítékkal!) → töltésvezérlő. Napelem → töltésvezérlő. Ellenőrizd multiméterrel a
    töltésvezérlő 5 V-os kimenetét.
 2. TPL5110 bekötése: töltésvezérlő 5 V → TPL5110 VDD; TPL5110 kimenet → USB-A aljzat → USB kábel →
    Arduino. TPL5110 DONE ← Arduino D3. Közös GND!

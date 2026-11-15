@@ -50,7 +50,7 @@ sequenceDiagram
 
     TPL->>A: 15 perc letelt → táp BE
     A->>A: akkufeszültség ellenőrzés
-    alt akku kritikus (< 3,3 V)
+    alt akku a kritikus küszöb alatt
         A->>TPL: DONE (azonnali lekapcsolás)
     end
     A->>M: táp BE + PWRKEY (hálózatkeresés indul)
@@ -82,8 +82,10 @@ tároljuk, az időbélyeget pedig a ThingSpeak szerver adja.
 ### Miért kap a szenzorok közül egyszerre csak egy tápot?
 A szondák ugyanabba a vízbe merülnek, és a víz vezeti az áramot. A TDS/EC szenzor váltakozó
 feszültséggel méri a vezetést, ami „áthallatszik” a nagyon érzékeny pH szondába, és elrontja a
-mérését. Ha egyszerre mindig csak egy szenzor működik, ez a zavarás megszűnik. (Haladó
-megoldás: galvanikus leválasztó modul – lásd [10_tovabbfejlesztes.md](10_tovabbfejlesztes.md).)
+mérését. Két védelmet használunk együtt: (1) egyszerre mindig csak egy szenzor kap tápot, és (2) a
+terepi dobozban a TDS/EC szenzor egy **galvanikus leválasztó modulon** át csatlakozik – ez a
+gyártó által ajánlott megoldás. Hogy a zavarás tényleg megszűnt-e, azt az összeszereléskor
+egy egyszerű próbával ellenőrizzük ([07_osszeszereles.md](07_osszeszereles.md), „Zavarás-próba”).
 
 ### Miért LTE Cat-1 modem, és nem a régi 2G (SIM800L)?
 A 2G (GSM) modemek nagyon olcsók, de a mobilszolgáltatók Európa-szerte fokozatosan
@@ -106,8 +108,8 @@ a kábelt, és a laptopot dugjuk a helyére – nincs veszélye annak, hogy két
 ### Miért közvetlenül az akkuról kapja a tápot a modem?
 A mobilmodemek adáskor rövid ideig akár **2 A**-es áramcsúcsot is felvehetnek. A modem-chipeket
 eleve Li-ion akkuról való működésre tervezték (3,4–4,2 V), így a legegyszerűbb és legbiztosabb,
-ha közvetlenül az akkuról, egy kapcsoló-MOSFET-en és egy nagy kondenzátoron keresztül
-táplálunk. Az 5 V-os ág így nem terhelődik túl.
+ha közvetlenül az akkuról, egy lágyan induló kapcsoló-MOSFET-en át táplálunk, az akku mellé tett
+nagy puffer kondenzátorral. Az 5 V-os ág így nem terhelődik túl.
 
 ## 2.4 A firmware felépítése
 
@@ -138,8 +140,8 @@ flowchart LR
 |---|---|---|
 | `OK` | minden rendben | – |
 | `SZIVARGAS` | a doboz páratartalma > 80% | azonnal ellenőrizni, szilikagél csere, tömítés |
-| `AKKU_GYENGE` | akku < 3,5 V | napelem tiszta? árnyék? mérési gyakoriság csökkentése |
-| `AKKU_KRITIKUS` | akku < 3,3 V – a doboz nem mér | akkucsere / töltés |
+| `AKKU_GYENGE` | akku a figyelmeztető küszöb alatt (GSM módban 3,65 V, WiFi módban 3,5 V) | napelem tiszta? árnyék? mérési gyakoriság csökkentése |
+| `AKKU_KRITIKUS` | akku a kritikus küszöb alatt (GSM: 3,5 V, WiFi: 3,3 V). A doboz ilyenkor nem mér és **nem is küld**, ezért ez az üzenet a ThingSpeaken **nem jelenik meg** – csak a soros monitoron és a LED mátrixon (X). Távolról a jele: `AKKU_GYENGE` üzenetek után elmaradnak az adatok | akkucsere / töltés |
 | `VIZHOMERO_HIBA` | nincs DS18B20 jel | kábel, csatlakozó |
 | `DOBOZSZENZOR_HIBA` | nincs BME280 | Qwiic kábel |
 | `PH_HIBA`, `EC_HIBA`, `ZAVAROSSAG_HIBA`, `DO_HIBA` | a szenzor jele értelmetlen | kábel, szonda, kalibráció |
