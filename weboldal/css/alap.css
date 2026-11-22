@@ -161,6 +161,7 @@ code { font-family: var(--kod); font-size: .9em; background: var(--felulet-2); p
 .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--szoveg); text-decoration: none; }
 .logo svg { width: 24px; height: 24px; fill: var(--kiemelt); }
 .menu { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; }
+@media (max-width: 600px) { .menu { gap: 0; } .menu a { padding: 8px 6px; font-size: .84rem; } }
 .menu a {
   color: var(--szoveg); text-decoration: none; padding: 8px 12px; border-radius: 8px; white-space: nowrap; font-size: .95rem;
 }

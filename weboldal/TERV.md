@@ -4,8 +4,8 @@
 > doboz, és **hogyan működik** – úgy, hogy egy 10–14 éves diák kattintgatva megértse, egy szülő
 > vagy egy másik iskola tanára pedig kedvet kapjon a saját példány megépítéséhez.
 >
-> **Állapot:** az első bemutatható változat (MVP) elkészült: kezdőlap, **Felépítés** (M2) és
-> **Működés** (M4, forgatókönyvek nélkül). Megnyitás: `weboldal/index.html` duplakattintással,
+> **Állapot:** elkészült a kezdőlap, a **Felépítés** (M2), a **Szenzorok** (M3, 7 szimulátorral)
+> és a **Működés** (M4, forgatókönyvek nélkül). Megnyitás: `weboldal/index.html` duplakattintással,
 > vagy bármilyen statikus webszerverrel. A számok és képletek forrása mindig a repó
 > (`firmware/vizerzekelo/config.h`, `sensors.cpp`, `docs/`, `tools/energia_kalkulator.py`).
 
@@ -242,7 +242,8 @@ weboldal/
 ├── index.html                 ✅ az egész oldal váza, szakaszonként <section>
 ├── css/
 │   ├── alap.css               ✅ színek (változók), tipográfia, világos/sötét téma
-│   └── szakaszok.css          ✅ ábra, kártya, lejátszó, mobil nézet
+│   ├── szakaszok.css          ✅ ábra, kártya, lejátszó, mobil nézet
+│   └── szimulatorok.css       ✅ szenzor-fülek, jelút, csúszkák, szimulátor-rajzok
 └── js/
     ├── segedek.js             ✅ elem-készítő, számformázás, eseménybusz, közös állapot
     ├── main.js                ✅ téma, menü, kezdőlap csempéi, indítás
@@ -251,16 +252,25 @@ weboldal/
     │   ├── komponensek.js     ✅ alkatrész-kártyák + a belső ábra koordinátái + lábkiosztás
     │   ├── ciklus.js          ✅ a mérési ciklus lépései, soros kiírások, ThingSpeak mezők
     │   └── szotar.js          ⏳ szótár bejegyzések
-    ├── fizika/                ⏳ kepletek.js (sensors.cpp), energia.js (energia_kalkulator.py)
+    ├── fizika/
+    │   ├── kepletek.js        ✅ a sensors.cpp képletei 1:1-ben + a fordítottjuk a szimulációhoz
+    │   └── energia.js         ⏳ az energia_kalkulator.py logikája
     ├── komponensek/
     │   ├── abra.js            ✅ a belső ábra kirajzolása (Felépítés és Működés közös)
     │   ├── allomas.js         ✅ a külső nézet (parti állomás, vízszint csúszka)
     │   ├── ledmatrix.js       ✅ 12×8 LED mátrix, ikonok a status.cpp-ből
-    │   └── jelut.js, grafikon.js, buborek.js   ⏳
+    │   ├── jelut.js           ✅ a közös „jelút” sáv (víz → szenzor → V → ADC → képlet → érték)
+    │   ├── szimkellekek.js    ✅ csúszka, gombsor, tartomány-sáv, részecskék, ADC minták zajjal
+    │   └── grafikon.js, buborek.js   ⏳
     └── szakaszok/
         ├── felepites.js       ✅ kártyák, rétegszűrő, lábkiosztás, USE_DO kapcsoló
         ├── mukodes.js         ✅ ciklus-lejátszó (idővonal, soros monitor, üzenet)
-        └── szenzorok.js, energia.js, adatut.js  ⏳
+        ├── szenzorok.js       ✅ fülek, animációs ciklus; a szimulátorok bejegyzése
+        └── energia.js, adatut.js  ⏳
+    szimulatorok/              ✅ szenzoronként egy fájl: vizho, ph, ec, zavarossag,
+                                  oxigen, doboz, akku (új szenzor = új fájl + egy <script> sor)
+tesztek/
+    └── kepletek.test.html     ✅ böngészőben futó képlet-tesztek (fájlból is megnyitható)
 ```
 
 **Fontos ábra-szabály:** az ábrák elemei nem kézzel rajzolt SVG-fájlok, hanem a
@@ -338,6 +348,15 @@ soros kiírás, AT parancs), így új forgatókönyv hozzáadása csak egy új l
 **Legkisebb bemutatható változat (MVP) = M1 + M2 + M4 egyszerűsítve** (forgatókönyvek nélkül) –
 ez már lefedi a két fő kérést: a felépítést és a vizualizált működést. **✅ Elkészült.**
 Az M4-ből még hátravan: forgatókönyv-választó, WiFi mód, áramfelvétel-grafikon.
+
+**M3 ✅ elkészült:** a 7 szimulátor, a közös jelút, a képletek + 29 teszt, a pH kalibráló
+mini-játék és a zavarás-bemutató. Ami a 4.3 pontból még hátravan: a „Drága vagy olcsó?”
+oktatási-szenzor fül. Megvalósítási részletek, amik a tervben nem szerepeltek:
+- a szimulátor a „valódi” szenzor feszültségét a firmware képletének **fordítottjával**
+  számolja ki, aztán az ADC (31 zajos minta, nyesett átlag) és a **firmware képlete** számol
+  vissza – így a kerekítés, a zaj és a kalibrálási hiba ugyanúgy megjelenik, mint a valóságban;
+- a TDS panel kimenete legfeljebb kb. 2,3 V: e fölött a mért EC „beragad” (kb. 2200 µS/cm),
+  és a firmware ezt nem jelzi hibaként – a szimulátor ezt meg is mutatja.
 
 Az M3–M4 részei kiválóan alkalmasak **diák-feladatnak** is (pl. egy szenzor jelút-szimulátorát
 egy csapat készíti el a közös komponens felhasználásával) – ez kapcsolódhat az oktatási segédlet
