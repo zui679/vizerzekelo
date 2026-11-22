@@ -29,6 +29,10 @@ flowchart LR
 > **Állapot:** tervezési fázis (verzió: lásd [CHANGELOG.md](CHANGELOG.md)) – a firmware lefordul az UNO R4 WiFi-re, de a hardvert
 > még nem építettük meg és nem teszteltük. A tapasztalatok alapján a dokumentáció változni fog.
 
+> **Interaktív bemutató:** nyisd meg a [`weboldal/index.html`](weboldal/index.html) fájlt egy
+> böngészőben – kattintható ábrán szétszedheted a dobozt, és lejátszhatod, mi történik benne egy
+> mérés alatt. (Terv és további lépések: [weboldal/TERV.md](weboldal/TERV.md).)
+
 ---
 
 ## 📁 Mappaszerkezet
@@ -65,6 +69,7 @@ Vizerzekelo/
 ├── tools/
 │   ├── energia_kalkulator.py   ← akku / napelem méretezés
 │   └── thingspeak_letoltes.py  ← mért adatok letöltése CSV-be, statisztika
+├── weboldal/                ← interaktív bemutató oldal (index.html, build nélkül)
 └── adatok/                  ← letöltött mérési adatok helye
 ```
 

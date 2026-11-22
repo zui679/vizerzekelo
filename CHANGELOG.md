@@ -3,6 +3,17 @@
 A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
 
 ## [Nem kiadott]
+### Interaktív bemutató weboldal (első változat)
+- Új [weboldal/](weboldal/) mappa: böngészőben futó, build nélküli oldal
+  ([terv](weboldal/TERV.md)). Fájlból megnyitva is működik, világos/sötét témával, mobilon is.
+- **Felépítés:** kattintható belső ábra (alkatrészek, színkódolt vezetékek, Arduino lábak) és
+  külső nézet (parti állomás, vízszint-csúszkával). Alkatrész-kártyák, rétegszűrő,
+  lábkiosztás-táblázat, `USE_DO` kapcsoló.
+- **Működés:** a mérési ciklus lejátszása lépésenként – mi kap éppen áramot, LED mátrix,
+  soros monitor (a firmware kiírásaival), AT parancsok, az összeálló ThingSpeak üzenet.
+- A számok a `config.h`-ból és a dokumentációból származnak (`weboldal/js/adatok/`); a
+  `config.h` változásakor a `konstansok.js`-t is frissíteni kell.
+
 ### Tesztprogramok három lapra
 - A 11 tesztprogram mostantól az **UNO R4 WiFi**, a **Nano 33 IoT** és a **Nano RP2040 Connect**
   lapon is fut: a program felismeri a lapot, és beállítja az ADC-t (14 bit / 5 V vagy
