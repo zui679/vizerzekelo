@@ -18,6 +18,9 @@ A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
   csak egy szenzor áramot.
 - A `sensors.cpp` képletei JavaScriptben (`weboldal/js/fizika/kepletek.js`), böngészőben futó
   tesztekkel (`weboldal/tesztek/kepletek.test.html`, 29 teszt).
+- **Publikálás:** GitHub Pages a `main` ágról: <https://zui679.github.io/vizerzekelo/>. A gyökérben
+  `.nojekyll` (a GitHub nem dolgozza fel Jekyll-lel a repót) és egy `index.html`, ami a
+  gyökércímről a `weboldal/`-ra irányít.
 - A számok a `config.h`-ból és a dokumentációból származnak (`weboldal/js/adatok/`); a
   `config.h` vagy a `sensors.cpp` változásakor a `konstansok.js`-t, illetve a `kepletek.js`-t
   is frissíteni kell.

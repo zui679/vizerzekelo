@@ -29,8 +29,8 @@ flowchart LR
 > **Állapot:** tervezési fázis (verzió: lásd [CHANGELOG.md](CHANGELOG.md)) – a firmware lefordul az UNO R4 WiFi-re, de a hardvert
 > még nem építettük meg és nem teszteltük. A tapasztalatok alapján a dokumentáció változni fog.
 
-> **Interaktív bemutató:** nyisd meg a [`weboldal/index.html`](weboldal/index.html) fájlt egy
-> böngészőben – kattintható ábrán szétszedheted a dobozt, szimulátorokkal kipróbálhatod a
+> **Interaktív bemutató:** élőben itt: <https://zui679.github.io/vizerzekelo/> –
+> vagy nyisd meg a [`weboldal/index.html`](weboldal/index.html) fájlt egy böngészőben – kattintható ábrán szétszedheted a dobozt, szimulátorokkal kipróbálhatod a
 > szenzorokat, és lejátszhatod, mi történik benne egy mérés alatt. (Terv és további lépések: [weboldal/TERV.md](weboldal/TERV.md).)
 
 ---
