@@ -12,14 +12,20 @@
 
 ### Tesztprogramok
 
+A tesztprogramok **három lapon** futnak: UNO R4 WiFi, Nano 33 IoT és Nano RP2040 Connect.
+A program maga ismeri fel a lapot, és beállítja az ADC-t, az I2C buszt és a WiFi könyvtárat.
+A Nano lapok **3,3 V-osak** – a bekötési különbségeket a programok eleje és a
+[13. fejezet](../docs/13_vezerlok_osszehasonlitasa.md) írja le. (A fő program továbbra is csak
+az UNO R4 WiFi-re készült.)
+
 | # | Program | Mit próbál ki? | Extra könyvtár |
 |---|---|---|---|
-| 01 | `01_led_matrix` | Arduino + LED mátrix, első feltöltés | – |
+| 01 | `01_led_matrix` | első feltöltés: LED mátrix (UNO R4) / Morse-kód a beépített LED-en (Nano lapok) | – |
 | 02 | `02_ds18b20_vizhomero` | DS18B20 vízhőmérő | OneWire, DallasTemperature |
 | 03 | `03_analog_szenzorok` | pH, EC, zavarosság, DO nyers feszültsége (klónokkal, PH-4502C-vel is) | – |
 | 04 | `04_bme280_doboz` | BME280 doboz klíma | Adafruit BME280 |
 | 05 | `05_modem_at_konzol` | modem kézi AT parancsokkal | – |
-| 06 | `06_wifi_thingspeak` | első adatküldés WiFi-n | – |
+| 06 | `06_wifi_thingspeak` | első adatküldés WiFi-n | Nano lapokon: WiFiNINA |
 | 07 | `07_ntc_homero` | NTC termisztor hőmérő | – |
 | 08 | `08_diy_vezetokepesseg` | barkács vezetőképesség-mérő (2 csavar) | – |
 | 09 | `09_diy_zavarossag` | LED + LDR zavarosságmérő | – |
@@ -125,5 +131,7 @@ Doboz páratartalom: 41 %
 
 - ✅ Lefordul: `arduino:renesas_uno` 1.6.0, mindhárom `TRANSPORT_MODE`-ban, mindkét `PH_BOARD`
   beállítással, és mind a 11 tesztprogram.
+- ✅ A 11 tesztprogram lefordul Nano 33 IoT-ra (`arduino:samd` 1.8.14) és Nano RP2040 Connectre
+  (`arduino:mbed_nano` 4.6.0 és `rp2040:rp2040` 6.4.0) is.
 - ⬜ Hardveren tesztelve – **még nem**. Az első összeépítésnél a `DEBUG_AT 1` beállítás és a
   tesztprogramok sokat segítenek a hibakeresésben.

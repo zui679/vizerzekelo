@@ -1,12 +1,19 @@
 // =====================================================================
 //  TESZT 11 – Vízszintmérés ultrahanggal (HC-SR04 / JSN-SR04T)
+//  Lapok: UNO R4 WiFi, Nano 33 IoT, Nano RP2040 Connect
 //
 //  Az érzékelő egy rövid hangimpulzust küld (40 kHz, emberi füllel nem
 //  hallható), és megméri, mennyi idő múlva ér vissza a vízfelszínről
 //  visszaverődött visszhang. Ebből a hangsebességgel kiszámolható a távolság,
 //  abból pedig a vízszint – pont mint a denevérek!
 //
-//  Bekötés:  VCC → 5V,  GND → GND,  TRIG → D11,  ECHO → D12
+//  Bekötés:  VCC → táp,  GND → GND,  TRIG → D11,  ECHO → D12
+//    UNO R4 WiFi:  VCC → 5V (bármelyik változat jó)
+//    Nano lapok:   csak a 3,3 V-ról is működő HC-SR04+ változatot használd,
+//                  VCC → 3V3! A régi, csak 5 V-os HC-SR04 (és az 5 V-ról
+//                  táplált JSN-SR04T) ECHO jele 5 V-os – ez tönkreteheti a lapot.
+//                  Ha mégis ilyet használsz: az ECHO jelet feszültségosztón át
+//                  (pl. 10 kΩ + 20 kΩ) kösd a D12-re.
 //  Az érzékelőt egy vödör / akvárium fölé, FELÜLRŐL lefelé nézve rögzítsd.
 //  A SZERELESI_MAGASSAG a szenzor és a vödör alja közti távolság (mérd meg!).
 //

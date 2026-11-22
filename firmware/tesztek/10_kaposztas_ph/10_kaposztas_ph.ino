@@ -1,5 +1,6 @@
 // =====================================================================
 //  TESZT 10 – pH mérés vöröskáposztával és színérzékelővel
+//  Lapok: UNO R4 WiFi, Nano 33 IoT, Nano RP2040 Connect
 //
 //  A vöröskáposzta leve természetes pH INDIKÁTOR: savban piros, semleges
 //  közegben lila, lúgban kék, zöld, majd sárga lesz. A TCS34725 színérzékelő
@@ -10,8 +11,10 @@
 //    2. Szűrd le – a lila lé az indikátor. Hűtőben pár napig eltartható.
 //    3. Egy fehér pohárba: kevés vizsgálandó folyadék + néhány kanál káposztalé.
 //
-//  Bekötés: TCS34725 panel Qwiic/STEMMA QT kábellel a Qwiic aljzatba,
-//  vagy 4 vezetékkel: VIN→5V, GND→GND, SDA→SDA, SCL→SCL (Arduino felső sor).
+//  Bekötés:
+//   UNO R4 WiFi: Qwiic/STEMMA QT kábellel a Qwiic aljzatba, vagy 4 vezetékkel:
+//                VIN→5V, GND→GND, SDA→SDA, SCL→SCL (Arduino felső sor).
+//   Nano lapok:  VIN→3V3 (NEM 5V!), GND→GND, SDA→A4, SCL→A5.
 //  Az érzékelő nézzen a pohárba fix távolságból, és takard le a szoba fénye elől!
 //
 //  Szükséges könyvtár: Adafruit TCS34725
@@ -69,9 +72,15 @@ float phBecsles(float hue) {
 void setup() {
   Serial.begin(115200);
   while (!Serial && millis() < 2000) {}
-  // Először a Qwiic aljzatot (Wire1), aztán a fejléc SDA/SCL lábait (Wire) próbáljuk
-  if (!tcs.begin(TCS34725_ADDRESS, &Wire1) && !tcs.begin(TCS34725_ADDRESS, &Wire)) {
-    Serial.println("HIBA: nem található a TCS34725 színérzékelő. Bekötés?");
+  bool megvan = false;
+#if defined(ARDUINO_UNOWIFIR4)
+  // UNO R4 WiFi: először a Qwiic aljzat (Wire1)
+  megvan = tcs.begin(TCS34725_ADDRESS, &Wire1);
+#endif
+  // Nano lapokon (és az UNO R4 SDA/SCL fejlécén) a Wire busz: A4 = SDA, A5 = SCL
+  if (!megvan) megvan = tcs.begin(TCS34725_ADDRESS, &Wire);
+  if (!megvan) {
+    Serial.println("HIBA: nem található a TCS34725 színérzékelő. Bekötés? Táp?");
     while (true) delay(1000);
   }
   Serial.println("R;G;B;fenyesseg;hue_fok;pH_becsles");
