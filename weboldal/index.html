@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vízérzékelő doboz</title>
+  <meta name="description" content="Interaktív bemutató: miből áll és hogyan működik a napelemes, mobilhálózaton adatot küldő iskolai vízminőség-mérő doboz.">
+  <link rel="stylesheet" href="css/alap.css">
+  <link rel="stylesheet" href="css/szakaszok.css">
+  <script>
+    // A téma beállítása még a rajzolás előtt, hogy ne villanjon.
+    try {
+      var t = localStorage.getItem("ve-tema");
+      if (t === "vilagos" || t === "sotet") document.documentElement.dataset.theme = t === "sotet" ? "dark" : "light";
+    } catch (e) { /* privát ablakban nincs tárolás – nem baj */ }
+  </script>
+</head>
+<body>
+  <a class="ugras" href="#fotartalom">Ugrás a tartalomra</a>
+
+  <header class="fejlec">
+    <div class="fejlec-belso">
+      <a class="logo" href="#kezdo" aria-label="Vízérzékelő – kezdőlap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c-3.2 4.2-6.5 8-6.5 11.6A6.5 6.5 0 0 0 12 20.6a6.5 6.5 0 0 0 6.5-6.5C18.5 10.5 15.2 6.7 12 2.5z"/></svg>
+        <span>Vízérzékelő</span>
+      </a>
+      <nav class="menu" aria-label="Fő menü">
+        <a href="#felepites">Felépítés</a>
+        <a href="#mukodes">Működés</a>
+        <a href="#tovabb">Tovább</a>
+      </nav>
+      <button class="tema-gomb" id="tema-gomb" type="button" aria-label="Világos / sötét téma váltása">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="fotartalom">
+
+    <!-- ===================== 1. KEZDŐLAP ===================== -->
+    <section id="kezdo" class="szakasz kezdo">
+      <div class="kezdo-szoveg">
+        <p class="cimke" id="verzio-cimke">Tervezési fázis</p>
+        <h1>Napelemes doboz a folyóparton, ami negyedóránként megméri a vizet</h1>
+        <p class="bevezeto">
+          …és az eredményt a mobilhálózaton át elküldi az internetre, ahol bárki grafikonon
+          követheti a folyó állapotát. Ezen az oldalon szétszedheted a dobozt, és lejátszhatod,
+          mi történik benne egy mérés alatt.
+        </p>
+        <div class="gombsor">
+          <a class="gomb elsodleges" href="#felepites">Nézzük meg, miből áll</a>
+          <a class="gomb" href="#mukodes">Játsszuk le egy mérést</a>
+        </div>
+      </div>
+
+      <figure class="attekinto" aria-label="Az adatok útja: szenzorok, Arduino, modem, felhő, grafikon">
+        <svg viewBox="0 0 640 230" role="img" aria-labelledby="attekinto-cim">
+          <title id="attekinto-cim">A szenzorok mérnek, az Arduino feldolgozza, a modem elküldi a felhőbe, ahol grafikon készül. A napelem tölti az akkut.</title>
+          <defs>
+            <marker id="nyil-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 10 5 0 10z" fill="var(--szoveg-halvany)"/>
+            </marker>
+          </defs>
+          <!-- víz -->
+          <path class="a-viz" d="M0 190 q20 -8 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 V230 H0z"/>
+          <!-- lépések -->
+          <g class="a-lepes" transform="translate(20 108)">
+            <rect width="110" height="56" rx="10"/>
+            <text x="55" y="25">Szenzorok</text><text x="55" y="43" class="kicsi">a vízben</text>
+          </g>
+          <g class="a-lepes" transform="translate(170 108)">
+            <rect width="110" height="56" rx="10"/>
+            <text x="55" y="25">Arduino</text><text x="55" y="43" class="kicsi">számol</text>
+          </g>
+          <g class="a-lepes" transform="translate(320 108)">
+            <rect width="110" height="56" rx="10"/>
+            <text x="55" y="25">LTE modem</text><text x="55" y="43" class="kicsi">elküldi</text>
+          </g>
+          <g class="a-lepes" transform="translate(470 108)">
+            <rect width="150" height="56" rx="10"/>
+            <text x="75" y="25">ThingSpeak</text><text x="75" y="43" class="kicsi">grafikon a weben</text>
+          </g>
+          <path class="a-vonal" d="M130 136 H168" marker-end="url(#nyil-a)"/>
+          <path class="a-vonal" d="M280 136 H318" marker-end="url(#nyil-a)"/>
+          <path class="a-vonal szaggatott" d="M430 136 H468" marker-end="url(#nyil-a)"/>
+          <circle class="a-csepp" r="6" cx="0" cy="0">
+            <animateMotion dur="5s" repeatCount="indefinite" path="M75 136 H545"/>
+          </circle>
+          <!-- energia -->
+          <g class="a-lepes energia" transform="translate(150 12)">
+            <rect width="150" height="50" rx="10"/>
+            <text x="75" y="22">☀ Napelem</text><text x="75" y="39" class="kicsi">tölti az akkut</text>
+          </g>
+          <path class="a-vonal" d="M225 62 V106" marker-end="url(#nyil-a)"/>
+          <g class="a-lepes" transform="translate(470 12)">
+            <rect width="150" height="50" rx="10"/>
+            <text x="75" y="22">15 percenként</text><text x="75" y="39" class="kicsi">egy mérés, utána alszik</text>
+          </g>
+        </svg>
+      </figure>
+
+      <div class="csempek" id="csempek" aria-label="Mit mér a doboz?"></div>
+    </section>
+
+    <!-- ===================== 2. FELÉPÍTÉS ===================== -->
+    <section id="felepites" class="szakasz">
+      <div class="szakasz-fej">
+        <p class="cimke">1. rész</p>
+        <h2>Felépítés – miből áll a doboz?</h2>
+        <p>Kattints bármelyik alkatrészre, és megtudod, mire jó, hova van bekötve, és miért pont ezt választottuk.</p>
+      </div>
+
+      <div class="eszkoztar">
+        <div class="valto" role="group" aria-label="Nézet">
+          <button type="button" class="valto-gomb" data-nezet="kulso" aria-pressed="false">Kívülről</button>
+          <button type="button" class="valto-gomb" data-nezet="belso" aria-pressed="true">Belülről</button>
+        </div>
+        <div class="retegek" role="group" aria-label="Rétegek kiemelése" id="reteg-gombok"></div>
+      </div>
+
+      <div class="felepites-racs">
+        <div class="abra-keret">
+          <div id="abra-belso" class="abra"></div>
+          <div id="abra-kulso" class="abra" hidden></div>
+          <div class="kulso-vezerlo" id="kulso-vezerlo" hidden>
+            <label for="vizszint">Vízszint</label>
+            <input type="range" id="vizszint" min="0" max="100" value="20">
+            <output id="vizszint-ki" for="vizszint">normál</output>
+          </div>
+          <p class="gorgetes-tipp" aria-hidden="true">Az ábra oldalra görgethető ↔</p>
+          <div class="jelmagyarazat" id="jelmagyarazat" aria-label="Vezetékek színkódja"></div>
+          <p class="megjegyzes" id="gnd-megjegyzes">A föld (GND) vezetékeket az áttekinthetőség kedvéért nem rajzoltuk be – a valóságban minden alkatrész GND-je össze van kötve.</p>
+        </div>
+
+        <aside class="kartya" id="kartya" aria-live="polite">
+          <div class="kartya-ures">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v2H7a2 2 0 0 0-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9zm-2 4h10v10H7V7z"/></svg>
+            <p><strong>Válassz egy alkatrészt</strong> az ábrán.</p>
+            <p class="halvany">Billentyűzettel: Tab, majd Enter.</p>
+          </div>
+        </aside>
+      </div>
+
+      <label class="kapcsolo-sor">
+        <input type="checkbox" id="use-do">
+        <span><strong>Oldott oxigén szenzor beépítve</strong> (<code>USE_DO 1</code>) – drága és karbantartásigényes, ezért alapból nincs benne. Ha bekapcsolod, a működés-lejátszásban is megjelenik.</span>
+      </label>
+
+      <details class="labkiosztas" open>
+        <summary>Lábkiosztás – melyik láb mire való?</summary>
+        <p class="halvany">Vidd az egeret egy sorra: az ábrán kigyullad a hozzá tartozó vezeték.</p>
+        <div class="tabla-keret">
+          <table id="lab-tabla">
+            <thead><tr><th scope="col">Láb</th><th scope="col">Mire?</th><th scope="col">Jel</th><th scope="col">Megjegyzés</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== 3. MŰKÖDÉS ===================== -->
+    <section id="mukodes" class="szakasz">
+      <div class="szakasz-fej">
+        <p class="cimke">2. rész</p>
+        <h2>Működés – mi történik egy mérés alatt?</h2>
+        <p>A doboz az idő 99%-ában teljesen ki van kapcsolva, csak egy apró időzítő ketyeg. Negyedóránként felébred, mér, küld, és visszaalszik. Indítsd el, és nézd, mi kap éppen áramot!</p>
+      </div>
+
+      <div class="lejatszo" id="lejatszo">
+        <div class="lejatszo-gombok">
+          <button type="button" class="gomb elsodleges" id="lj-inditas"><span class="ikon-play" aria-hidden="true"></span><span class="felirat">Indítás</span></button>
+          <button type="button" class="gomb" id="lj-vissza" aria-label="Előző lépés">◀ Előző</button>
+          <button type="button" class="gomb" id="lj-elore" aria-label="Következő lépés">Következő ▶</button>
+          <button type="button" class="gomb" id="lj-ujra" aria-label="Újrakezdés">↺ Újra</button>
+          <div class="valto sebesseg" role="group" aria-label="Sebesség">
+            <button type="button" class="valto-gomb" data-seb="1" aria-pressed="false">1×</button>
+            <button type="button" class="valto-gomb" data-seb="3" aria-pressed="true">3×</button>
+            <button type="button" class="valto-gomb" data-seb="10" aria-pressed="false">10×</button>
+          </div>
+          <div class="ido" aria-live="off" title="Az ébredés óta eltelt idő"><span id="lj-ido">0,0 s</span></div>
+        </div>
+
+        <ol class="idovonal" id="idovonal" aria-label="A mérési ciklus lépései"></ol>
+
+        <div class="lejatszo-racs">
+          <div class="abra-keret">
+            <div id="abra-mukodes" class="abra"></div>
+            <p class="gorgetes-tipp" aria-hidden="true">Az ábra oldalra görgethető ↔</p>
+          </div>
+
+          <div class="lejatszo-oldal">
+            <div class="lepes-leiras" id="lepes-leiras" aria-live="polite"></div>
+
+            <div class="panel">
+              <h3>LED mátrix az Arduinón</h3>
+              <div class="ledmatrix-sor">
+                <div id="ledmatrix" class="ledmatrix" role="img" aria-label="LED mátrix: üres"></div>
+                <ul class="ikon-jelmagyarazat">
+                  <li><span>💧</span> mérés</li>
+                  <li><span>⬆</span> küldés</li>
+                  <li><span>✔</span> sikerült</li>
+                  <li><span>✖</span> hiba</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lejatszo-also">
+          <div class="panel soros">
+            <h3>Soros monitor <span class="halvany">(ezt látnád a laptopon, 115200 baud)</span></h3>
+            <pre id="soros" class="soros-kepernyo" tabindex="0" aria-label="Soros monitor kimenete"></pre>
+          </div>
+          <div class="panel uzenet">
+            <h3>Az elküldött üzenet</h3>
+            <p class="halvany" id="uzenet-allapot">A mérés végén áll össze.</p>
+            <code id="uzenet-url" class="url"></code>
+            <ul id="uzenet-mezok" class="mezok"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. TOVÁBB ===================== -->
+    <section id="tovabb" class="szakasz tovabb">
+      <div class="szakasz-fej">
+        <p class="cimke">Tovább</p>
+        <h2>Építsd meg te is!</h2>
+        <p>A teljes leírás, a bekötés, a program és az oktatási segédlet a projekt tárhelyén van.</p>
+      </div>
+      <div class="link-racs" id="link-racs"></div>
+      <div class="biztonsag">
+        <strong>⚠ Biztonság röviden:</strong>
+        vízparton diák soha nem dolgozik egyedül, és a vízbe nem megy be; a Li-ion akkuval,
+        forrasztással és vegyszerekkel csak felnőtt dolgozik; folyóba eszközt tenni engedélyköteles lehet.
+      </div>
+    </section>
+  </main>
+
+  <footer class="lablec">
+    <p>Vízérzékelő doboz – iskolai projekt. A számok a firmware beállításaiból (<code>config.h</code>) és a dokumentációból származnak; ahol „kb.” szerepel, az becslés – a dobozt még nem építettük meg.</p>
+  </footer>
+
+  <!-- Sima szkriptek (nem modulok), hogy az oldal fájlból megnyitva is működjön. -->
+  <script src="js/segedek.js"></script>
+  <script src="js/adatok/konstansok.js"></script>
+  <script src="js/adatok/komponensek.js"></script>
+  <script src="js/adatok/ciklus.js"></script>
+  <script src="js/komponensek/abra.js"></script>
+  <script src="js/komponensek/allomas.js"></script>
+  <script src="js/komponensek/ledmatrix.js"></script>
+  <script src="js/szakaszok/felepites.js"></script>
+  <script src="js/szakaszok/mukodes.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

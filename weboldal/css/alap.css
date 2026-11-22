@@ -1,0 +1,214 @@
+/* =====================================================================
+   Alap: színek (változók), betűk, általános elemek, világos/sötét téma
+   ===================================================================== */
+:root {
+  --hatter: #f6f8fa;
+  --felulet: #ffffff;
+  --felulet-2: #eef2f6;
+  --szoveg: #17202a;
+  --szoveg-halvany: #5b6773;
+  --keret: #d5dde5;
+  --kiemelt: #0b6bcb;        /* fő akcentus: víz-kék */
+  --kiemelt-szoveg: #ffffff;
+  --viz: #cfe6f7;
+  --viz-sotet: #9cc9ea;
+  --meder: #c9b48f;
+  --siker: #1f8a4c;
+  --hiba: #c62828;
+  --figyelem: #a15c00;
+
+  /* vezetéktípusok (a hardware/bekotes.md színkódja alapján) */
+  --v-napelem: #8a5a00;
+  --v-5v: #d32f2f;
+  --v-vbat: #e46b00;
+  --v-analog: #b38600;
+  --v-digitalis: #1e63d6;
+  --v-uart: #188a4a;
+  --v-i2c: #8a4fd6;
+  --v-radio: #6b7785;
+
+  /* alkatrész-rétegek */
+  --r-energia: #fff3df;
+  --r-energia-k: #e0a040;
+  --r-vezerles: #e3f0ff;
+  --r-vezerles-k: #4f8fdc;
+  --r-kommunikacio: #f0e8ff;
+  --r-kommunikacio-k: #9b72d8;
+  --r-szenzor: #e2f6ea;
+  --r-szenzor-k: #3fa36b;
+
+  --aktiv: #ffcc33;
+  --arnyek: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 16px rgba(16, 24, 40, .06);
+  --kerekites: 12px;
+  --betu: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --kod: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --hatter: #0f141a;
+    --felulet: #161d25;
+    --felulet-2: #1d2630;
+    --szoveg: #e6edf3;
+    --szoveg-halvany: #9aa7b4;
+    --keret: #2c3845;
+    --kiemelt: #4da3ff;
+    --kiemelt-szoveg: #06121f;
+    --viz: #123049;
+    --viz-sotet: #1c4a6e;
+    --meder: #4a3f2c;
+    --siker: #4cc38a;
+    --hiba: #ff6b6b;
+    --figyelem: #f0b44c;
+    --v-napelem: #d6a24a;
+    --v-5v: #ff6b6b;
+    --v-vbat: #ff9a3c;
+    --v-analog: #f2cc3d;
+    --v-digitalis: #5c9dff;
+    --v-uart: #46c983;
+    --v-i2c: #b48cff;
+    --v-radio: #8b97a5;
+    --r-energia: #2e2412;
+    --r-energia-k: #b9822e;
+    --r-vezerles: #14243a;
+    --r-vezerles-k: #4f8fdc;
+    --r-kommunikacio: #241a38;
+    --r-kommunikacio-k: #9b72d8;
+    --r-szenzor: #11291c;
+    --r-szenzor-k: #3fa36b;
+    --aktiv: #ffd54a;
+    --arnyek: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --hatter: #0f141a;
+  --felulet: #161d25;
+  --felulet-2: #1d2630;
+  --szoveg: #e6edf3;
+  --szoveg-halvany: #9aa7b4;
+  --keret: #2c3845;
+  --kiemelt: #4da3ff;
+  --kiemelt-szoveg: #06121f;
+  --viz: #123049;
+  --viz-sotet: #1c4a6e;
+  --meder: #4a3f2c;
+  --siker: #4cc38a;
+  --hiba: #ff6b6b;
+  --figyelem: #f0b44c;
+  --v-napelem: #d6a24a;
+  --v-5v: #ff6b6b;
+  --v-vbat: #ff9a3c;
+  --v-analog: #f2cc3d;
+  --v-digitalis: #5c9dff;
+  --v-uart: #46c983;
+  --v-i2c: #b48cff;
+  --v-radio: #8b97a5;
+  --r-energia: #2e2412;
+  --r-energia-k: #b9822e;
+  --r-vezerles: #14243a;
+  --r-vezerles-k: #4f8fdc;
+  --r-kommunikacio: #241a38;
+  --r-kommunikacio-k: #9b72d8;
+  --r-szenzor: #11291c;
+  --r-szenzor-k: #3fa36b;
+  --aktiv: #ffd54a;
+  --arnyek: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--hatter);
+  color: var(--szoveg);
+  font-family: var(--betu);
+  font-size: 17px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; text-wrap: balance; }
+h1 { font-size: clamp(1.8rem, 4.2vw, 2.9rem); letter-spacing: -.01em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+h3 { font-size: 1.05rem; }
+p { margin: 0 0 1em; }
+a { color: var(--kiemelt); }
+code { font-family: var(--kod); font-size: .9em; background: var(--felulet-2); padding: .05em .35em; border-radius: 5px; }
+.halvany { color: var(--szoveg-halvany); }
+[hidden] { display: none !important; }
+
+:focus-visible { outline: 3px solid var(--kiemelt); outline-offset: 2px; border-radius: 4px; }
+
+.ugras { position: absolute; left: -999px; top: 8px; background: var(--felulet); padding: 8px 12px; z-index: 100; }
+.ugras:focus { left: 8px; }
+
+/* ---------- fejléc ---------- */
+.fejlec {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--felulet) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--keret);
+}
+.fejlec-belso {
+  max-width: 1240px; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--szoveg); text-decoration: none; }
+.logo svg { width: 24px; height: 24px; fill: var(--kiemelt); }
+.menu { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; }
+.menu a {
+  color: var(--szoveg); text-decoration: none; padding: 8px 12px; border-radius: 8px; white-space: nowrap; font-size: .95rem;
+}
+.menu a:hover, .menu a.aktiv { background: var(--felulet-2); }
+.menu a.aktiv { color: var(--kiemelt); font-weight: 600; }
+.tema-gomb {
+  border: 1px solid var(--keret); background: var(--felulet); color: var(--szoveg);
+  width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; cursor: pointer; flex: none;
+}
+.tema-gomb svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* ---------- szakaszok ---------- */
+.szakasz { max-width: 1240px; margin: 0 auto; padding: 64px 16px; }
+.szakasz + .szakasz { border-top: 1px solid var(--keret); }
+.szakasz-fej { max-width: 760px; margin-bottom: 28px; }
+.szakasz-fej p:last-child { color: var(--szoveg-halvany); font-size: 1.05rem; }
+.cimke {
+  display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--kiemelt); margin-bottom: .6em;
+}
+
+/* ---------- gombok ---------- */
+.gomb {
+  display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+  min-height: 44px; padding: 8px 16px; border-radius: 10px;
+  border: 1px solid var(--keret); background: var(--felulet); color: var(--szoveg);
+  font: inherit; font-size: .95rem; font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.gomb:hover { background: var(--felulet-2); }
+.gomb.elsodleges { background: var(--kiemelt); border-color: var(--kiemelt); color: var(--kiemelt-szoveg); }
+.gomb.elsodleges:hover { filter: brightness(1.08); }
+.gomb:disabled { opacity: .45; cursor: default; }
+.gombsor { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.valto { display: inline-flex; border: 1px solid var(--keret); border-radius: 10px; overflow: hidden; background: var(--felulet); }
+.valto-gomb {
+  border: 0; background: transparent; color: var(--szoveg); font: inherit; font-size: .9rem; font-weight: 600;
+  padding: 8px 14px; min-height: 40px; cursor: pointer;
+}
+.valto-gomb + .valto-gomb { border-left: 1px solid var(--keret); }
+.valto-gomb[aria-pressed="true"] { background: var(--kiemelt); color: var(--kiemelt-szoveg); }
+
+.panel {
+  background: var(--felulet); border: 1px solid var(--keret); border-radius: var(--kerekites);
+  padding: 16px; box-shadow: var(--arnyek);
+}
+.panel h3 { font-size: .95rem; margin-bottom: 10px; }
+
+/* ---------- lábléc ---------- */
+.lablec { border-top: 1px solid var(--keret); padding: 24px 16px 40px; text-align: center; color: var(--szoveg-halvany); font-size: .9rem; }
+.lablec p { max-width: 760px; margin: 0 auto; }
