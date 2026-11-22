@@ -50,6 +50,7 @@ Vizerzekelo/
 │   ├── 10_tovabbfejlesztes.md
 │   ├── 11_oktatasi_segedlet.md
 │   ├── 12_oktatasi_szenzorok.md  ← olcsó szenzorok tanuláshoz, bemutatáshoz
+│   ├── 13_vezerlok_osszehasonlitasa.md  ← UNO R4 WiFi, Nano 33 IoT, Nano RP2040 Connect
 │   ├── szotar.md            ← fogalomtár diákoknak
 │   └── kepek/               ← fényképek, rajzok
 ├── hardware/
