@@ -40,12 +40,15 @@
       ]);
       b.setAttribute("aria-label", c.nev + ", tipikus érték folyóvízben: " + c.ertek + ". Mivel mérjük: " + c.mivel);
       b.addEventListener("click", () => {
+        // ha van hozzá szimulátor, oda visz; különben az alkatrész-kártyához
+        const sim = VE.szenzorok.kartyabol(c.kartya);
+        if (sim) { VE.szenzorok.mutat(sim); return; }
         VE.felepites.mutat(c.kartya);
         document.getElementById("felepites").scrollIntoView({ behavior: VE.kevesMozgas() ? "auto" : "smooth" });
       });
       t.appendChild(b);
     });
-    t.insertAdjacentElement("beforebegin", el("p", { class: "halvany", style: "grid-column: 1 / -1; margin: 0", text: "Mit mér a doboz? (tipikus értékek egy folyóban – kattints a részletekért)" }));
+    t.insertAdjacentElement("beforebegin", el("p", { class: "halvany", style: "grid-column: 1 / -1; margin: 0", text: "Mit mér a doboz? (tipikus értékek – kattints, és kipróbálhatod a szenzort)" }));
   }
 
   // ---- „Építsd meg te is!” linkek ----
@@ -74,6 +77,7 @@
     csempek();
     linkek();
     VE.felepites.init();
+    VE.szenzorok.init();
     VE.mukodes.init();
     menuKovetes();
   }

@@ -48,6 +48,10 @@ window.VE = window.VE || {};
     tartalom.push(...lista("Jó tudni", k.tenyek));
     tartalom.push(...lista("Miért ezt választottuk?", k.miert));
     if (k.figyelem) tartalom.push(el("p", { class: "figyelem", text: "⚠ " + k.figyelem }));
+    const sim = VE.szenzorok && VE.szenzorok.kartyabol(id);
+    if (sim) {
+      tartalom.push(el("p", null, el("button", { class: "gomb elsodleges", type: "button", text: "▶ Próbáld ki a szimulátorban", onclick: () => VE.szenzorok.mutat(sim) })));
+    }
     if (k.belulrol) {
       tartalom.push(el("p", null, el("button", { class: "gomb elsodleges", type: "button", text: "Nézzünk bele! →", onclick: () => nezetValt("belso") })));
     }

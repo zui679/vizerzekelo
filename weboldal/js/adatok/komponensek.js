@@ -416,4 +416,5 @@ VE.csempek = [
   { nev: "Zavarosság", ikon: "🌫", ertek: "5–50 NTU", mivel: "optikai szenzor", kartya: "zavarossag" },
   { nev: "Oldott oxigén", ikon: "🐟", ertek: "7–12 mg/l", mivel: "galvanikus szonda – opcionális", kartya: "do", opcionalis: true },
   { nev: "Doboz páratartalma", ikon: "💦", ertek: "20–50 %", mivel: "BME280 – beázásjelző", kartya: "bme280" },
+  { nev: "Akkufeszültség", ikon: "🔋", ertek: "3,5–4,2 V", mivel: "feszültségosztó", kartya: "oszto" },
 ];

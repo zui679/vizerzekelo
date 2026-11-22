@@ -7,6 +7,7 @@
   <meta name="description" content="Interaktív bemutató: miből áll és hogyan működik a napelemes, mobilhálózaton adatot küldő iskolai vízminőség-mérő doboz.">
   <link rel="stylesheet" href="css/alap.css">
   <link rel="stylesheet" href="css/szakaszok.css">
+  <link rel="stylesheet" href="css/szimulatorok.css">
   <script>
     // A téma beállítása még a rajzolás előtt, hogy ne villanjon.
     try {
@@ -26,6 +27,7 @@
       </a>
       <nav class="menu" aria-label="Fő menü">
         <a href="#felepites">Felépítés</a>
+        <a href="#szenzorok">Szenzorok</a>
         <a href="#mukodes">Működés</a>
         <a href="#tovabb">Tovább</a>
       </nav>
@@ -49,6 +51,7 @@
         </p>
         <div class="gombsor">
           <a class="gomb elsodleges" href="#felepites">Nézzük meg, miből áll</a>
+          <a class="gomb" href="#szenzorok">Próbáljuk ki a szenzorokat</a>
           <a class="gomb" href="#mukodes">Játsszuk le egy mérést</a>
         </div>
       </div>
@@ -158,10 +161,21 @@
       </details>
     </section>
 
-    <!-- ===================== 3. MŰKÖDÉS ===================== -->
-    <section id="mukodes" class="szakasz">
+    <!-- ===================== 3. SZENZOROK ===================== -->
+    <section id="szenzorok" class="szakasz">
       <div class="szakasz-fej">
         <p class="cimke">2. rész</p>
+        <h2>Szenzorok – hogyan lesz a vízből szám?</h2>
+        <p>Minden szenzor ugyanazt csinálja: egy fizikai mennyiségből feszültséget (vagy kész számot) készít, az Arduino ezt számmá alakítja, és egy képlettel kiszámolja a valódi értéket. Válassz egy szenzort, húzd a csúszkát, és kövesd a jelet a víztől az elküldött számig!</p>
+      </div>
+      <div class="szenzor-fulek" role="tablist" aria-label="Szenzorok" id="szenzor-fulek"></div>
+      <div id="szenzor-panelek"></div>
+    </section>
+
+    <!-- ===================== 4. MŰKÖDÉS ===================== -->
+    <section id="mukodes" class="szakasz">
+      <div class="szakasz-fej">
+        <p class="cimke">3. rész</p>
         <h2>Működés – mi történik egy mérés alatt?</h2>
         <p>A doboz az idő 99%-ában teljesen ki van kapcsolva, csak egy apró időzítő ketyeg. Negyedóránként felébred, mér, küld, és visszaalszik. Indítsd el, és nézd, mi kap éppen áramot!</p>
       </div>
@@ -249,6 +263,18 @@
   <script src="js/komponensek/abra.js"></script>
   <script src="js/komponensek/allomas.js"></script>
   <script src="js/komponensek/ledmatrix.js"></script>
+  <script src="js/fizika/kepletek.js"></script>
+  <script src="js/komponensek/jelut.js"></script>
+  <script src="js/komponensek/szimkellekek.js"></script>
+  <script src="js/szakaszok/szenzorok.js"></script>
+  <!-- a szimulátorok ebben a sorrendben jelennek meg a füleken -->
+  <script src="js/szimulatorok/vizho.js"></script>
+  <script src="js/szimulatorok/ph.js"></script>
+  <script src="js/szimulatorok/ec.js"></script>
+  <script src="js/szimulatorok/zavarossag.js"></script>
+  <script src="js/szimulatorok/oxigen.js"></script>
+  <script src="js/szimulatorok/doboz.js"></script>
+  <script src="js/szimulatorok/akku.js"></script>
   <script src="js/szakaszok/felepites.js"></script>
   <script src="js/szakaszok/mukodes.js"></script>
   <script src="js/main.js"></script>

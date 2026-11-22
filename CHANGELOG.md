@@ -11,8 +11,16 @@ A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
   lábkiosztás-táblázat, `USE_DO` kapcsoló.
 - **Működés:** a mérési ciklus lejátszása lépésenként – mi kap éppen áramot, LED mátrix,
   soros monitor (a firmware kiírásaival), AT parancsok, az összeálló ThingSpeak üzenet.
+- **Szenzorok:** 7 szimulátor (vízhő, pH, vezetőképesség, zavarosság, oldott oxigén, doboz
+  páratartalma, akku) csúszkákkal és animált ábrával. Mindegyiknél végigkövethető a jel útja:
+  víz → szenzor → feszültség → ADC (31 minta, nyesett átlag) → képlet → elküldött érték.
+  pH kalibráló mini-játék (a 6,86-os puffer hibájával), és bemutató arról, miért kap egyszerre
+  csak egy szenzor áramot.
+- A `sensors.cpp` képletei JavaScriptben (`weboldal/js/fizika/kepletek.js`), böngészőben futó
+  tesztekkel (`weboldal/tesztek/kepletek.test.html`, 29 teszt).
 - A számok a `config.h`-ból és a dokumentációból származnak (`weboldal/js/adatok/`); a
-  `config.h` változásakor a `konstansok.js`-t is frissíteni kell.
+  `config.h` vagy a `sensors.cpp` változásakor a `konstansok.js`-t, illetve a `kepletek.js`-t
+  is frissíteni kell.
 
 ### Tesztprogramok három lapra
 - A 11 tesztprogram mostantól az **UNO R4 WiFi**, a **Nano 33 IoT** és a **Nano RP2040 Connect**

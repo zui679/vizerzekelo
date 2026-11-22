@@ -30,8 +30,8 @@ flowchart LR
 > még nem építettük meg és nem teszteltük. A tapasztalatok alapján a dokumentáció változni fog.
 
 > **Interaktív bemutató:** nyisd meg a [`weboldal/index.html`](weboldal/index.html) fájlt egy
-> böngészőben – kattintható ábrán szétszedheted a dobozt, és lejátszhatod, mi történik benne egy
-> mérés alatt. (Terv és további lépések: [weboldal/TERV.md](weboldal/TERV.md).)
+> böngészőben – kattintható ábrán szétszedheted a dobozt, szimulátorokkal kipróbálhatod a
+> szenzorokat, és lejátszhatod, mi történik benne egy mérés alatt. (Terv és további lépések: [weboldal/TERV.md](weboldal/TERV.md).)
 
 ---
 

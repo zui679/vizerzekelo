@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Képlet-tesztek</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; background: #fff; color: #17202a; }
+    h1 { font-size: 1.4rem; }
+    table { border-collapse: collapse; font-size: .9rem; }
+    td, th { padding: 4px 10px; border-bottom: 1px solid #ddd; text-align: left; }
+    .ok { color: #1f8a4c; font-weight: 700; }
+    .hiba { color: #c62828; font-weight: 700; }
+    code { font-family: ui-monospace, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>A weboldal képletei egyeznek-e a firmware-rel?</h1>
+  <p>A várt értékeket a <code>sensors.cpp</code> képleteivel, kézzel / Pythonnal számoltuk ki.
+     Ha a firmware képlete változik, itt is frissíteni kell a várt értéket.</p>
+  <p id="osszegzes"></p>
+  <table>
+    <thead><tr><th>Teszt</th><th>Kapott</th><th>Várt</th><th>Eredmény</th></tr></thead>
+    <tbody id="eredmenyek"></tbody>
+  </table>
+
+  <script src="../js/segedek.js"></script>
+  <script src="../js/adatok/konstansok.js"></script>
+  <script src="../js/fizika/kepletek.js"></script>
+  <script src="../js/adatok/ciklus.js"></script>
+  <script>
+    const F = VE.kepletek, G = F.GYARI;
+    const tesztek = [
+      // [név, kapott, várt, tűrés]
+      ["pH: kalibrációs pont pH 7 (1,500 V, 25 °C)", F.phFromVoltage(1.5, 25), 7, 1e-9],
+      ["pH: kalibrációs pont pH 4 (2,032 V, 25 °C)", F.phFromVoltage(2.032, 25), 4, 1e-9],
+      ["pH: hőkompenzáció (1,8 V, 10 °C)", F.phFromVoltage(1.8, 10), 5.21865, 1e-4],
+      ["pH: a lejátszó mintamérése (1,3542 V, 11,94 °C → 7,86)", F.phFromVoltage(VE.mintaMeres.phFesz, VE.mintaMeres.vizHo), VE.mintaMeres.ph, 0.005],
+      ["pH: oda-vissza (pH 9,2, 18 °C)", F.phFromVoltage(F.phFesz(9.2, 18), 18), 9.2, 1e-9],
+      ["EC: 1,0 V, 25 °C, K = 1", F.ecFromVoltage(1.0, 25), 734.95, 1e-6],
+      ["EC: hőkompenzáció (1,0 V, 15 °C)", F.ecFromVoltage(1.0, 15), 932.5422, 1e-3],
+      ["EC: K = 1,1 (0,8 V, 20 °C)", F.ecFromVoltage(0.8, 20, 1.1), 719.0354, 1e-3],
+      ["EC: oda-vissza (412 µS/cm, 11,94 °C)", F.ecFromVoltage(F.ecFesz(412, 11.94), 11.94), 412, 1e-6],
+      ["EC: 0 V → 0", F.ecFromVoltage(0, 25), 0, 0],
+      ["Zavarosság: 4,3 V (tisztább, mint a kalibráció) → 0", F.turbidityFromVoltage(4.3), 0, 0],
+      ["Zavarosság: 3,5 V", F.turbidityFromVoltage(3.5), 2020.25, 1e-6],
+      ["Zavarosság: 3,9 V", F.turbidityFromVoltage(3.9), 1000.786, 1e-3],
+      ["Zavarosság: 2,0 V (a görbe alatt) → 3000", F.turbidityFromVoltage(2.0), 3000, 0],
+      ["Zavarosság: tiszta víz kalibrálva 4,0 V-ra, mért 3,5 V", F.turbidityFromVoltage(3.5, Object.assign({}, G, { turbClearV: 4.0 })), 1618.35025, 1e-4],
+      ["Zavarosság: oda-vissza (37 NTU)", F.turbidityFromVoltage(F.zavarossagFesz(37)), 37, 1e-6],
+      ["Oldott O₂: telítési pont (1,6 V, 25 °C) → 8,25", F.doFromVoltage(1.6, 25), 8.25, 1e-9],
+      ["Oldott O₂: 0,8 V, 20 °C", F.doFromVoltage(0.8, 20), 5.09754, 1e-4],
+      ["Oldott O₂: 1,2 V, 12,4 °C (táblázat: 12 °C)", F.doFromVoltage(1.2, 12.4), 11.15099, 1e-4],
+      ["Oldott O₂: oda-vissza (9,8 mg/l, 11,94 °C)", F.doFromVoltage(F.doFesz(9.8, 11.94), 11.94), 9.8, 1e-9],
+      ["ADC: 1,3542 V → 4437", F.adcSzam(1.3542), 4437, 0],
+      ["ADC: 5 V → 16383", F.adcSzam(5), 16383, 0],
+      ["ADC: nyesett átlag eldobja a tüskéket", F.nyesettAtlag([10, 10, 10, 9000, 11, 0, 10, 10, 10]).atlag, 10, 0],
+      ["DS18B20: 25,0625 °C → 0x0191", F.ds18b20Nyers(25.0625), 0x0191, 0],
+      ["DS18B20: −10,125 °C → 0xFF5E", F.ds18b20Nyers(-10.125), 0xff5e, 0],
+      ["DS18B20: 0xFF5E → −10,125 °C", F.ds18b20Hom(0xff5e), -10.125, 0],
+      ["Akku: A3 = 1,99 V → 3,98 V", F.akkuFromA3(1.99), 3.98, 1e-9],
+      ["Leválasztás-gyanú: 0,01 V", F.levaltNakTunik(0.01) ? 1 : 0, 1, 0],
+      ["Leválasztás-gyanú: 2,5 V", F.levaltNakTunik(2.5) ? 1 : 0, 0, 0],
+    ];
+
+    let jo = 0;
+    const tbody = document.getElementById("eredmenyek");
+    tesztek.forEach(([nev, kapott, vart, tures]) => {
+      const ok = Math.abs(kapott - vart) <= tures;
+      if (ok) jo++;
+      const tr = document.createElement("tr");
+      [nev, String(+kapott.toFixed(6)), String(vart), ok ? "OK" : "HIBA"].forEach((s, i) => {
+        const td = document.createElement("td");
+        td.textContent = s;
+        if (i === 3) td.className = ok ? "ok" : "hiba";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    const o = document.getElementById("osszegzes");
+    o.textContent = jo + " / " + tesztek.length + " teszt sikeres";
+    o.className = jo === tesztek.length ? "ok" : "hiba";
+    document.title = (jo === tesztek.length ? "OK " : "HIBA ") + jo + "/" + tesztek.length;
+  </script>
+</body>
+</html>
