@@ -140,15 +140,26 @@ A [12. fejezet](12_oktatasi_szenzorok.md) kísérleteihez a Nano 33 IoT és a Na
 **kiválóan használható**. Így több csoport dolgozhat egyszerre, az UNO R4 WiFi lapok pedig
 megmaradhatnak a terepi doboz fejlesztésére.
 
-| Kísérlet (tesztprogram) | Nano 33 IoT / Nano RP2040 Connect | Teendő |
+**A tesztprogramok (01–11) mindhárom lapon futnak:** a program elején egy rövid rész
+felismeri, melyik lapra fordítjuk, és ehhez igazítja az ADC-t (14 bit / 5 V vagy 12 bit /
+3,3 V), az I2C buszt és a WiFi könyvtárat. A programokon tehát nem kell változtatni –
+**a bekötésre viszont figyelni kell**, mert a Nano lapok 3,3 V-osak:
+
+| Kísérlet (tesztprogram) | Nano 33 IoT / Nano RP2040 Connect | Mire figyelj a bekötésnél? |
 |---|---|---|
-| 02 DS18B20, 04 BME280 | ✅ | 3,3 V-ról táplálni; BME280-nál `Wire1` helyett `Wire` (A4/A5) |
-| 03 analóg szenzorok, 07 NTC, 08 barkács EC, 09 LED+LDR | ✅ | a program elején: 12 bit és 3,3 V referencia (14 bit / 5 V helyett); a szenzorokat 3,3 V-ról táplálni. A lábszámokat a lapra igazítani (a Nano RP2040 Connecten csak A0–A3 analóg) |
-| 10 vöröskáposzta (TCS34725) | ✅ | `Wire` (A4/A5) |
-| 11 HC-SR04 | ✅ a **HC-SR04+** (3,3–5 V-os) változattal | a régi, csak 5 V-os HC-SR04 ECHO jele tönkreteheti a lapot! |
-| PH-4502C | ⚠️ | 5 V-os jel → feszültségosztó kell |
-| 06 WiFi + ThingSpeak | ✅ | `WiFiS3` helyett `WiFiNINA` |
-| 01 LED mátrix | ❌ | ezeken a lapokon nincs LED mátrix (a Nano RP2040 Connect RGB LED-je helyettesítheti) |
+| 01 LED mátrix | ✅ (Morse-kód a beépített LED-en) | – (ezeken a lapokon nincs LED mátrix, helyette Morse-kódot villog) |
+| 02 DS18B20 | ✅ | szenzor és 4,7 kΩ felhúzó a **3V3**-ra |
+| 03 analóg szenzorok | ✅ | pH és TDS panel 3V3-ról; a **zavarosság szenzor és a PH-4502C csak feszültségosztón át**! A Nano RP2040 Connecten a DO bemenet az A3 (nincs saját A4) |
+| 04 BME280, 10 vöröskáposzta (TCS34725) | ✅ | 3V3, SDA → A4, SCL → A5 |
+| 05 modem konzol | ✅ | 3,3 V-os modem panelnél nem kell szintillesztő |
+| 06 WiFi + ThingSpeak | ✅ | – (a **WiFiNINA** könyvtárat telepíteni kell) |
+| 07 NTC, 09 LED+LDR | ✅ | az osztókat a **3V3**-ra kösd; a 09-ben piros/sárga/zöld LED (a fehér és kék alig világít 3,3 V-ról) |
+| 08 barkács EC | ✅ | mindhárom lapon ugyanúgy: D11, D12, A3 |
+| 11 HC-SR04 | ✅ a **HC-SR04+** (3,3–5 V-os) változattal, 3V3-ról | a régi, csak 5 V-os HC-SR04 ECHO jele tönkreteheti a lapot! |
+
+Mindegyik programot lefordítottuk mindhárom lapra (a Nano RP2040 Connecten mindkét
+fejlesztőkörnyezettel), és ellenőriztük, hogy minden lap a neki szánt beállítást kapja.
+Valódi lapokon még nem próbáltuk ki őket.
 
 **Python a Nano RP2040 Connecten:** erre a lapra MicroPython is telepíthető (az Arduino
 hivatalosan is támogatja). Így a diákok **Pythonban** is programozhatják a szenzorokat – a
@@ -164,7 +175,7 @@ bekapcsolás előtt felnőttel ellenőriztetni.
 | Felhasználás | UNO R4 WiFi | Nano 33 IoT | Nano RP2040 Connect |
 |---|---|---|---|
 | **Terepi doboz** | ✅ **ajánlott** (kész, lefordított program) | 🟡 használható átírással, plusz alkatrészekkel | 🟠 csak külső ADC-vel (ADS1115), oldott oxigén nélkül |
-| **Oktatási kísérletek** | ✅ | ✅ (3,3 V-ra figyelni) | ✅ (3,3 V-ra figyelni), Pythonban is |
+| **Oktatási kísérletek** | ✅ | ✅ ugyanazokkal a tesztprogramokkal (3,3 V-ra figyelni) | ✅ ugyanazokkal a tesztprogramokkal (3,3 V-ra figyelni), Pythonban is |
 | **Második / kisebb állomás** | ✅ | ✅ jó jelölt | 🟡 ADS1115-tel |
 
 ## Források

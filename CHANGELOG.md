@@ -3,7 +3,18 @@
 A formátum: minden verziónál röviden, mi változott. Dátum: ÉÉÉÉ-HH-NN.
 
 ## [Nem kiadott]
+### Tesztprogramok három lapra
+- A 11 tesztprogram mostantól az **UNO R4 WiFi**, a **Nano 33 IoT** és a **Nano RP2040 Connect**
+  lapon is fut: a program felismeri a lapot, és beállítja az ADC-t (14 bit / 5 V vagy
+  12 bit / 3,3 V), az I2C buszt (Qwiic `Wire1` vagy `Wire`) és a WiFi könyvtárat (WiFiS3 / WiFiNINA).
+- 01: a LED mátrix nélküli lapokon Morse-kódot villog a beépített LED.
+- 08: a mérőbemenet A5 helyett A3 (a Nano RP2040 Connecten az A5 nem analóg bemenet).
+- Bekötési figyelmeztetések a 3,3 V-os lapokhoz minden érintett programban.
+- Lefordítva mind a négy célra (Nano RP2040 Connect: két fejlesztőkörnyezet); valódi lapon nem tesztelt.
+
 ### Dokumentáció
+- Új [docs/13_vezerlok_osszehasonlitasa.md](docs/13_vezerlok_osszehasonlitasa.md): az UNO R4 WiFi,
+  a Nano 33 IoT és a Nano RP2040 Connect összehasonlítása, fordítási próbával.
 - Új [hardware/beszerzes.md](hardware/beszerzes.md): magyarországi beszerzési források az
   oktatási készlethez (HESTORE, Hanna Instruments, mindenitt.hu), termékkódokkal, árakkal
   (≈ 81 500 Ft, 4 csoport + tartalék). Megjegyzés a pH pufferről: a HESTORE 6,86-os pora

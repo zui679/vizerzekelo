@@ -1,9 +1,13 @@
 // =====================================================================
 //  TESZT 02 – Vízhőmérő (DS18B20)
+//  Lapok: UNO R4 WiFi, Nano 33 IoT, Nano RP2040 Connect
 //
-//  Bekötés:  piros  → 5V
+//  Bekötés:  piros  → a lap tápfeszültsége:
+//                       UNO R4 WiFi: 5V    Nano lapok: 3V3 (NEM 5V!)
 //            fekete → GND
-//            sárga  → D4, ÉS egy 4,7 kΩ ellenállás a D4 és az 5V között
+//            sárga  → D4, ÉS egy 4,7 kΩ ellenállás a D4 és a piros vezeték között
+//  ⚠️ A Nano lapok 3,3 V-osak: ott a szenzort és a 4,7 kΩ-ot is 3V3-ra kösd,
+//     különben az 5 V-os jel tönkreteheti a lapot.
 //
 //  Szükséges könyvtárak: OneWire, DallasTemperature
 //

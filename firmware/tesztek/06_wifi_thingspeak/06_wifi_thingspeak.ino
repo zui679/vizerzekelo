@@ -1,5 +1,6 @@
 // =====================================================================
 //  TESZT 06 – Első adatküldés az internetre (WiFi + ThingSpeak)
+//  Lapok: UNO R4 WiFi, Nano 33 IoT, Nano RP2040 Connect
 //
 //  Mielőtt a modemmel bajlódnánk, az iskolai WiFi-n kipróbáljuk, hogy
 //  a ThingSpeak csatornára eljutnak-e az adatok.
@@ -9,11 +10,20 @@
 //   2. Az alábbi 3 sor kitöltése (a kitöltött fájlt ne töltsd fel nyilvánosan!)
 //   3. Feltöltés, majd nézd a csatorna grafikonját a weboldalon!
 //
+//  Szükséges könyvtár a Nano lapokhoz: WiFiNINA
+//  (az UNO R4 WiFi a beépített WiFiS3 könyvtárat használja).
+//
 //  A program 20 másodpercenként elküldi:
 //    field1 = egy számláló,  field2 = a WiFi jelerőssége (dBm)
 //  (A ThingSpeak ingyenes változata 15 mp-nél sűrűbben nem fogad adatot.)
 // =====================================================================
-#include <WiFiS3.h>
+#if defined(ARDUINO_UNOWIFIR4)
+  #include <WiFiS3.h>       // UNO R4 WiFi: ESP32-S3 WiFi modul
+#elif defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_NANO_RP2040_CONNECT)
+  #include <WiFiNINA.h>     // Nano lapok: u-blox NINA-W102 WiFi modul
+#else
+  #error "Ismeretlen lap! Ez a program UNO R4 WiFi, Nano 33 IoT és Nano RP2040 Connect lapra készült."
+#endif
 
 const char* WIFI_SSID = "iskola-wifi-neve";
 const char* WIFI_PASS = "wifi-jelszo";
@@ -24,6 +34,10 @@ int szamlalo = 0;
 void setup() {
   Serial.begin(115200);
   while (!Serial && millis() < 2000) {}
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("HIBA: a WiFi modul nem válaszol.");
+    while (true) delay(1000);
+  }
   Serial.print("Csatlakozás: ");
   Serial.println(WIFI_SSID);
   while (WiFi.begin(WIFI_SSID, WIFI_PASS) != WL_CONNECTED) {
